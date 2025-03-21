@@ -1,5 +1,5 @@
-@import "@variables";
+@use "@variables" as var;
 
 .container {
-  background: $background-main;
+  background: var.$background-main;
 }

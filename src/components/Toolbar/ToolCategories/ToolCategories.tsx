@@ -2,7 +2,7 @@ import { useToolbarCategory } from "@shared/contexts/ToolbarCategory/useToolbarC
 import { ToolbarCategories, ToolbarCategoriesNames } from "@shared/types/Toolbar";
 
 export const ToolCategories = () => {
-  const { currentCategory, setCurrentCategory } = useToolbarCategory();
+  const { setCurrentCategory } = useToolbarCategory();
 
   return (
     <div className="flex flex-row justify-between items-center px-4 cursor-pointer">

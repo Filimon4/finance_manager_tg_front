@@ -1,14 +1,16 @@
 import { ToolCategories } from "@components/Toolbar/ToolCategories/ToolCategories";
+import Overview from "@components/Toolbar/ToolOverview/Overview";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
 import { useToolbarCategory } from "@shared/contexts/ToolbarCategory/useToolbarCategory";
 import { ToolbarCategories } from "@shared/types/Toolbar";
-import { useCallback } from "react";
+
+
 
 const Toolbar = () => {
   const { currentCategory } = useToolbarCategory();
 
   const toolbarRouter = {
-    [ToolbarCategories.overview]: <></>,
+    [ToolbarCategories.overview]: <Overview/>,
     [ToolbarCategories.accounts]: <></>,
     [ToolbarCategories.history]: <></>,
     [ToolbarCategories.summary]: <></>,

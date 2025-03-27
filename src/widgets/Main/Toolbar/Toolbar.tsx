@@ -7,22 +7,17 @@ import { useCallback } from "react";
 const Toolbar = () => {
   const { currentCategory } = useToolbarCategory();
 
-  const toolbarRouter = useCallback(() => {
-    if (currentCategory == ToolbarCategories.overview) {
-      return <>overview</>;
-    } else if (currentCategory == ToolbarCategories.accounts) {
-      return <>accounts</>;
-    } else if (currentCategory == ToolbarCategories.history) {
-      return <>history</>;
-    } else if (currentCategory == ToolbarCategories.summary) {
-      return <>summary</>;
-    }
-  }, [currentCategory]);
+  const toolbarRouter = {
+    [ToolbarCategories.overview]: <></>,
+    [ToolbarCategories.accounts]: <></>,
+    [ToolbarCategories.history]: <></>,
+    [ToolbarCategories.summary]: <></>,
+  };
 
   return (
     <div className="h-full w-full flex flex-col gap-1">
       <ToolCategories />
-      <WhitePanelContainer>{toolbarRouter()}</WhitePanelContainer>
+      <WhitePanelContainer>{toolbarRouter[currentCategory]}</WhitePanelContainer>
     </div>
   );
 };

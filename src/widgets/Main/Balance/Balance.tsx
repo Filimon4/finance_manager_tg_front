@@ -11,12 +11,17 @@ const Balance = () => {
     queryKey: ["balance"],
     queryFn: async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/api/test/balance`
+        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/balance`,
+        {
+          params: {
+            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
+          },
+        }
       );
       await new Promise((res) => setTimeout(() => res(true), 1500));
       return res;
     },
-    staleTime: 60000,
+    staleTime: 1,
   });
 
   return (

@@ -8,7 +8,6 @@ const Overview = () => {
   const { setCurrentCategory } = useToolbarCategory();
 
   const setCategory = (category: ToolbarCategories) => {
-    console.log("setCategory");
     setCurrentCategory(category);
   };
 

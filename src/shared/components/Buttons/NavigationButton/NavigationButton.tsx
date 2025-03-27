@@ -1,9 +1,9 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import type { IStyledBaseButton } from "@shared/types/Buttons";
-import StyledBaseButton from "../StyledBaseButton/StyledBaseButton";
+import type { IStyledBaseContainer } from "@shared/types/Containers";
+import StyledBaseContainer from "../../containers/StyledBaseContainer/StyledBaseComponent";
 
-interface NavigationButtonProps extends IStyledBaseButton {
+interface NavigationButtonProps extends IStyledBaseContainer {
   link: string;
   children: React.ReactNode;
 }
@@ -16,14 +16,14 @@ const NavigationButton: FC<NavigationButtonProps> = ({
   const navigate = useNavigate();
 
   return (
-    <StyledBaseButton style={style}>
+    <StyledBaseContainer style={style}>
       <button
         className="w-full h-full flex flex-row justify-between px-5 items-center"
         onClick={() => navigate(link)}
       >
         {children}
       </button>
-    </StyledBaseButton>
+    </StyledBaseContainer>
   );
 };
 

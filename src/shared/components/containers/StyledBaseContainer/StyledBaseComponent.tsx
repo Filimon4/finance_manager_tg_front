@@ -1,10 +1,10 @@
 import ButtonSqureContainer from "@shared/components/containers/Buttons/ButtonSqureContainer";
 import ButtonRoundContainer from "@shared/components/containers/Buttons/ButtonsRoundContainer";
-import type { IStyledBaseButton, TStyleButtons } from "@shared/types/Buttons";
+import type { IStyledBaseContainer, TStyleContainer } from "@shared/types/Containers";
 import React, { FC } from "react";
 
 interface StyledButtonProps {
-  style: TStyleButtons;
+  style: TStyleContainer;
   children: React.ReactNode;
 }
 
@@ -26,12 +26,12 @@ const StyledButton: FC<StyledButtonProps> = ({ children, style }) => {
   );
 };
 
-interface StyledBaseButtonProps extends IStyledBaseButton {
+interface StyledBaseButtonProps extends IStyledBaseContainer {
   children: React.ReactNode;
 }
 
-const StyledBaseButton: FC<StyledBaseButtonProps> = ({ children, style }) => {
+const StyledBaseContainer: FC<StyledBaseButtonProps> = ({ children, style }) => {
   return <StyledButton style={style}>{children}</StyledButton>;
 };
 
-export default StyledBaseButton;
+export default StyledBaseContainer;

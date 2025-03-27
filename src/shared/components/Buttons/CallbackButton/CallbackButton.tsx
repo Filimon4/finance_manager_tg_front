@@ -1,8 +1,8 @@
 import React, { FC } from "react";
-import StyledBaseButton from "../StyledBaseButton/StyledBaseButton";
-import { IStyledBaseButton } from "@shared/types/Buttons";
+import StyledBaseContainer from "../../containers/StyledBaseContainer/StyledBaseComponent";
+import { IStyledBaseContainer } from "@shared/types/Containers";
 
-interface CallbackButtonProps extends IStyledBaseButton {
+interface CallbackButtonProps extends IStyledBaseContainer {
   callback: () => void;
   children: React.ReactNode;
 }
@@ -13,14 +13,14 @@ const CallbackButton: FC<CallbackButtonProps> = ({
   children,
 }) => {
   return (
-    <StyledBaseButton style={style}>
+    <StyledBaseContainer style={style}>
       <button
         className="w-full h-full flex flex-row justify-between px-5 items-center"
         onClick={() => callback()}
       >
         {children}
       </button>
-    </StyledBaseButton>
+    </StyledBaseContainer>
   );
 };
 

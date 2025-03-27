@@ -1,5 +1,6 @@
 import { ToolCategories } from "@components/Toolbar/ToolCategories/ToolCategories";
-import Overview from "@components/Toolbar/ToolOverview/Overview";
+import Overview from "@components/Toolbar/Overview/Overview";
+import History from "@components/Toolbar/History/History";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
 import { useToolbarCategory } from "@shared/contexts/ToolbarCategory/useToolbarCategory";
 import { ToolbarCategories } from "@shared/types/Toolbar";
@@ -9,7 +10,7 @@ const Toolbar = () => {
 
   const toolbarRouter = {
     [ToolbarCategories.overview]: <Overview />,
-    [ToolbarCategories.accounts]: <></>,
+    [ToolbarCategories.accounts]: <History />,
     [ToolbarCategories.history]: <></>,
     [ToolbarCategories.summary]: <></>,
   };

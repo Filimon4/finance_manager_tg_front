@@ -1,4 +1,4 @@
-import FormElementContainer from "../containers/FormElementContainer/FormElementContainer";
+import ButtonSqureContainer from "../containers/Buttons/ButtonSqureContainer";
 
 const FormInput = ({
   value,
@@ -10,7 +10,7 @@ const FormInput = ({
   placeholder: string;
 }) => {
   return (
-    <FormElementContainer>
+    <ButtonSqureContainer>
       <input
         className="outline-0 w-full h-full text-black p-5"
         placeholder={placeholder}
@@ -18,7 +18,7 @@ const FormInput = ({
         onChange={(e) => setValue(e.currentTarget.value)}
         type="text"
       />
-    </FormElementContainer>
+    </ButtonSqureContainer>
   );
 };
 

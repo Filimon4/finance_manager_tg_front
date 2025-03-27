@@ -4,13 +4,11 @@ import WhitePanelContainer from "@shared/components/containers/WhitePanelContain
 import { useToolbarCategory } from "@shared/contexts/ToolbarCategory/useToolbarCategory";
 import { ToolbarCategories } from "@shared/types/Toolbar";
 
-
-
 const Toolbar = () => {
   const { currentCategory } = useToolbarCategory();
 
   const toolbarRouter = {
-    [ToolbarCategories.overview]: <Overview/>,
+    [ToolbarCategories.overview]: <Overview />,
     [ToolbarCategories.accounts]: <></>,
     [ToolbarCategories.history]: <></>,
     [ToolbarCategories.summary]: <></>,
@@ -19,7 +17,9 @@ const Toolbar = () => {
   return (
     <div className="h-full w-full flex flex-col gap-1">
       <ToolCategories />
-      <WhitePanelContainer>{toolbarRouter[currentCategory]}</WhitePanelContainer>
+      <WhitePanelContainer>
+        {toolbarRouter[currentCategory]}
+      </WhitePanelContainer>
     </div>
   );
 };

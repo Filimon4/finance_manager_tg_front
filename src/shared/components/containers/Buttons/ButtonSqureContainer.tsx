@@ -1,6 +1,6 @@
 import React from "react";
 
-const FormElementContainer = ({ children }: { children: React.ReactNode }) => {
+const ButtonSqureContainer = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="w-full h-15 shadow shadow-gray-900/50 bg-white border-[1px] border-gray-900/50 rounded-2xl">
       {children}
@@ -8,4 +8,4 @@ const FormElementContainer = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default FormElementContainer;
+export default ButtonSqureContainer;

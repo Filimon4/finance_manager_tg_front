@@ -1,16 +1,15 @@
-
 export enum ToolbarCategories {
-  overview = 'overview',
-  history = 'history',
-  summary = 'summary',
-  accounts = 'accounts'
+  overview = "overview",
+  history = "history",
+  summary = "summary",
+  accounts = "accounts",
 }
 
 export const ToolbarCategoriesNames: {
-  [k in ToolbarCategories]: string
+  [k in ToolbarCategories]: string;
 } = {
-  [ToolbarCategories.accounts]: "Счета",
-  [ToolbarCategories.history]: "История",
   [ToolbarCategories.overview]: "Обзор",
+  [ToolbarCategories.history]: "История",
   [ToolbarCategories.summary]: "Резюме",
-}
+  [ToolbarCategories.accounts]: "Счета",
+};

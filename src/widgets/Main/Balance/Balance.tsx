@@ -24,8 +24,6 @@ const Balance = () => {
     staleTime: 1,
   });
 
-  console.log(data?.data);
-
   return (
     <BalanceContainer>
       <Mounth mounth="Январь" />

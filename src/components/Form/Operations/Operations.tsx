@@ -1,6 +1,7 @@
 import CallbackButton from "@shared/components/Buttons/CallbackButton/CallbackButton";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
 import FormInput from "@shared/components/Form/FormInput";
+import FormOperations from "@shared/components/Form/FormOperations";
 import { FormsCofnig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
 import { useState } from "react";
@@ -34,7 +35,7 @@ const Operation = () => {
             <div className="space-y-4">
               {config.items.map((item, index) => (
                 <div key={index} className="mb-4">
-                  {["number", "text"].includes(item.inputType) && (
+                  {["number", "text"].includes(item.inputType) ? (
                     <>
                       <FormInput
                         placeholder={item.placeholder ?? ""}
@@ -43,7 +44,14 @@ const Operation = () => {
                         value={formData[`${item.id}`] || ""}
                       />
                     </>
-                  )}
+                  ) : ["operation"].includes(item.inputType) ?
+                    <>
+                      <FormOperations
+                        setValue={(v) => onFormChange(item.id, v)}
+                        value={formData[`${item.id}`] || ""}
+                      />
+                    </>
+                  : <></>}
                 </div>
               ))}
             </div>

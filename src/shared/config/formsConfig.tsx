@@ -28,6 +28,7 @@ export const FormsCofnig: FromConfig = {
         placeholder: "Категории",
         listItems: [],
       },
+      { id: "amount", inputType: "text", placeholder: "Примечание" },
       { id: "date", inputType: "date" },
     ],
   },

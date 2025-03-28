@@ -9,7 +9,7 @@ export const ToolbarCategoriesNames: {
   [k in ToolbarCategories]: string;
 } = {
   [ToolbarCategories.overview]: "Обзор",
-  [ToolbarCategories.accounts]: "Счета",
   [ToolbarCategories.history]: "История",
   [ToolbarCategories.summary]: "Резюме",
+  [ToolbarCategories.accounts]: "Счета",
 };

@@ -11,18 +11,20 @@ const Balance = () => {
     queryKey: ["balance"],
     queryFn: async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/balance`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/account/balance`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
+            // tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+            tg_id: 1289261150,
           },
         }
       );
-      await new Promise((res) => setTimeout(() => res(true), 1500));
       return res;
     },
     staleTime: 1,
   });
+
+  console.log(data?.data);
 
   return (
     <BalanceContainer>
@@ -32,7 +34,7 @@ const Balance = () => {
           <p className="text-[#E5D0ED]">Баланс</p>
           <>
             <p className="flex flex-row gap-1 font-bold text-[1.5rem] text-[#E5D0ED]">
-              <span>{data?.data?.total || 0}</span>
+              <span>{data?.data?.total_balance || 0}</span>
               <span>{"Руб"}</span>
             </p>
           </>
@@ -53,7 +55,7 @@ const Balance = () => {
               />
               <>
                 <p className="text-[1.3rem] self-center">
-                  {data?.data?.expense || 0}
+                  {data?.data?.monthly_expense || 0}
                 </p>
               </>
             </div>
@@ -67,7 +69,7 @@ const Balance = () => {
                 height={"30px"}
               />
               <p className="text-[1.3rem] self-center">
-                {data?.data?.income || 0}
+                {data?.data?.monthly_income || 0}
               </p>
             </div>
           </div>

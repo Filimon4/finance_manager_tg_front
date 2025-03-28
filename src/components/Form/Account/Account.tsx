@@ -16,14 +16,12 @@ const Account = () => {
   );
 
   const onFormChange = (fieldName: string, value: any) => {
-    console.log("onFormChange: ", fieldName, value);
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,
     }));
   };
 
-  console.log(JSON.stringify(formData, null, 2));
 
   return (
     <div className="flex flex-col h-full py-5 text-lg">

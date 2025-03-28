@@ -9,7 +9,7 @@ const Account = () => {
   const config = FormsCofnig[FormType.account];
 
   const [formData, setFormData] = useState<Record<string, any>>(
-    config.items.reduce((acc, item, index) => {
+    config.items.reduce((acc, item) => {
       acc[`${item.id}`] = "";
       return acc;
     }, {} as Record<string, any>)

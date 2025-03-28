@@ -3,13 +3,13 @@ import WhitePanelContainer from "@shared/components/containers/WhitePanelContain
 import FormInput from "@shared/components/Form/FormInput";
 import { FormsCofnig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const Operation = () => {
   const config = FormsCofnig[FormType.operations];
 
   const [formData, setFormData] = useState<Record<string, any>>(
-    config.items.reduce((acc, item, index) => {
+    config.items.reduce((acc, item) => {
       acc[`${item.id}`] = "";
       return acc;
     }, {} as Record<string, any>)

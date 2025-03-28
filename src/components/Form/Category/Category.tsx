@@ -4,13 +4,13 @@ import FormInput from "@shared/components/Form/FormInput";
 import FormOperations from "@shared/components/Form/FormOperations";
 import { FormsCofnig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const Category = () => {
   const config = FormsCofnig[FormType.category];
 
   const [formData, setFormData] = useState<Record<string, any>>(
-    config.items.reduce((acc, item, index) => {
+    config.items.reduce((acc, item) => {
       acc[`${item.id}`] = "";
       return acc;
     }, {} as Record<string, any>)

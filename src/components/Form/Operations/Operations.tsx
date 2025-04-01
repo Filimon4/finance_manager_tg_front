@@ -1,6 +1,8 @@
 import CallbackButton from "@shared/components/Buttons/CallbackButton/CallbackButton";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
+import { FormDatePicker } from "@shared/components/Form/FormDatePicker";
 import FormInput from "@shared/components/Form/FormInput";
+import FormList from "@shared/components/Form/FormList";
 import FormOperations from "@shared/components/Form/FormOperations";
 import { FormsCofnig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
@@ -44,14 +46,29 @@ const Operation = () => {
                         value={formData[`${item.id}`] || ""}
                       />
                     </>
-                  ) : ["operation"].includes(item.inputType) ?
+                  ) : ["operation"].includes(item.inputType) ? (
                     <>
                       <FormOperations
                         setValue={(v) => onFormChange(item.id, v)}
                         value={formData[`${item.id}`] || ""}
                       />
                     </>
-                  : <></>}
+                  ) : ["list"].includes(item.inputType) ? (
+                    <>
+                      <>
+                        <FormList
+                          items={["1", "2", "3", "5"]}
+                          placeholder={String(item.placeholder)}
+                        />
+                      </>
+                    </>
+                  ) : ["date"].includes(item.inputType) ? (
+                    <>
+                      <FormDatePicker />
+                    </>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               ))}
             </div>

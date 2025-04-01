@@ -17,7 +17,7 @@ const FormInput: FC<FormInputProps> = ({
   return (
     <BoxInfo style="squre">
       <input
-        className="outline-0 w-full h-full text-black text-lg p-5 "
+        className="outline-0 w-full h-full text-black text-lg p-5 select-none"
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.currentTarget.value)}

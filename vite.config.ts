@@ -29,7 +29,8 @@ export default defineConfig({
         '@variables': resolvePath('src/shared/styles/variables.module.scss'),
         '@mixins': resolvePath('src/shared/styles/mixins.scss'),
         '@images': resolvePath('public/images'),
-        "@widgets": resolvePath("src/widgets")
+        "@widgets": resolvePath("src/widgets"),
+        "@hooks": resolvePath("src/shared/hooks"),
     },
 },
 })

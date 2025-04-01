@@ -4,6 +4,14 @@ import { ERoutes } from "@shared/types/Routes";
 const Accounts = () => {
   return (
     <div className="flex flex-col justify-between gap-2 h-full">
+      {false ? <>
+      </> : <>
+        <p className="flex w-full justify-center">
+          Нет счетов
+        </p>
+      </>  
+      }
+
       <NavigationButton link={ERoutes.accounts} style="round">
         <div className="flex w-full justify-center items-center cursor-pointer">
           <p>Добавить счет</p>

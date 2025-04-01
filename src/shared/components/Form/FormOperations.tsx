@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import BoxInfo from "../Info/BoxInfo/MoneyInfo";
+import BoxInfo from "../Info/BoxInfo/BoxInfo";
 import { EOperations } from "@shared/types/FormTypes";
 
 interface FormOperationsProps {

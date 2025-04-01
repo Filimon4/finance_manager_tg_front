@@ -1,9 +1,18 @@
+import { DropdownMenu } from "@shared/components/Dropbown/Dropbown";
 import { ERoutes } from "@shared/types/Routes";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsGear, BsThreeDotsVertical } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
+
+  const dropdownItems = [
+    {
+      label: "Настройки",
+      onClick: () => navigate(ERoutes.settings),
+      icon: <BsGear className="inline" />,
+    },
+  ]
 
   return (
     <div className="flex flex-row justify-between h-12 px-4">
@@ -14,11 +23,13 @@ const Header = () => {
         ФинАсистент
       </p>
       <div className="flex flex-row items-center h-full">
-        <BsThreeDotsVertical size={25} />
+        <DropdownMenu items={dropdownItems}>
+          <BsThreeDotsVertical size={25} className="cursor-pointer" />
+        </DropdownMenu>
         <img
           className="rounded-br-ful h-[50px] w-[50px] p-1"
-          src="/images/snowman.png"
-          alt="sdf"
+          src=""
+          alt="Аватарка"
         />
       </div>
     </div>

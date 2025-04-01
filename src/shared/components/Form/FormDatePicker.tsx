@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { ru } from "date-fns/locale";
 import { FaCalendarAlt } from "react-icons/fa";
-import BoxInfo from "../Info/BoxInfo/MoneyInfo";
+import BoxInfo from "../Info/BoxInfo/BoxInfo";
 import { ModalContainer } from "../containers/ModalContainer/ModalContainer";
 import useClickOutside from "@shared/hooks/useClickOutside";
 

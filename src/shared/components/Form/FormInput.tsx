@@ -1,5 +1,5 @@
 import { FC } from "react";
-import BoxInfo from "../Info/BoxInfo/MoneyInfo";
+import BoxInfo from "../Info/BoxInfo/BoxInfo";
 
 interface FormInputProps {
   type: React.HTMLInputTypeAttribute;

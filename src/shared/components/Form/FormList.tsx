@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import BoxInfo from "../Info/BoxInfo/MoneyInfo";
+import BoxInfo from "../Info/BoxInfo/BoxInfo";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,

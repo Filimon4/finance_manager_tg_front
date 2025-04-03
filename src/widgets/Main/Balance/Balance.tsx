@@ -21,7 +21,7 @@ const Balance = () => {
       );
       return res;
     },
-    staleTime: 1,
+    staleTime: 30000,
   });
 
   return (
@@ -32,7 +32,7 @@ const Balance = () => {
           <p className="text-[#E5D0ED]">Баланс</p>
           <>
             <p className="flex flex-row gap-1 font-bold text-[1.5rem] text-[#E5D0ED]">
-              <span>{data?.data?.total_balance || 0}</span>
+              <span>{data?.data?.balance || 0}</span>
               <span>{"Руб"}</span>
             </p>
           </>
@@ -53,7 +53,7 @@ const Balance = () => {
               />
               <>
                 <p className="text-[1.3rem] self-center">
-                  {data?.data?.monthly_expense || 0}
+                  {data?.data?.total_expenses || 0}
                 </p>
               </>
             </div>
@@ -67,7 +67,7 @@ const Balance = () => {
                 height={"30px"}
               />
               <p className="text-[1.3rem] self-center">
-                {data?.data?.monthly_income || 0}
+                {data?.data?.total_income || 0}
               </p>
             </div>
           </div>

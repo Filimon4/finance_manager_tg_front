@@ -1,3 +1,4 @@
+import CallbackButton from "@shared/components/Buttons/CallbackButton/CallbackButton"
 import { MainContainer } from "@shared/components/containers/MainContainer/MainContainer"
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer"
 import Header from "@widgets/Main/Header/Header"
@@ -14,7 +15,11 @@ const Settings = () => {
           <div className="h-full w-full flex flex-col flex-8 gap-1">
             <WhitePanelContainer>
               <div className="p-4 flex flex-col justify-between h-full">
-                
+                <CallbackButton callback={() => console.log('buttons')} style="squre">
+                  <div className="w-full h-full flex justify-start items-center px-2 cursor-pointer">
+                    <p>Экспорт в exel</p>
+                  </div>
+                </CallbackButton>
               </div>
             </WhitePanelContainer>
           </div>

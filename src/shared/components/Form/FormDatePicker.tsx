@@ -16,15 +16,17 @@ export const FormDatePicker = () => {
   return (
     <>
       <BoxInfo style="squre">
-        <span>
-          {selected ? selected.toLocaleDateString() : "Дата не выбрана"}
-        </span>
-        <button
-          onClick={() => setIsOpen(true)}
-          className="text-gray-500 hover:text-blue-500 transition-colors"
-        >
-          <FaCalendarAlt className="w-5 h-5" />
-        </button>
+        <div className="w-full h-full flex justify-between items-center px-4">
+          <span>
+            {selected ? selected.toLocaleDateString() : "Дата не выбрана"}
+          </span>
+          <button
+            onClick={() => setIsOpen(true)}
+            className="text-gray-500 hover:text-blue-500 transition-colors"
+            >
+            <FaCalendarAlt className="w-5 h-5" />
+          </button>
+        </div>
       </BoxInfo>
 
       <ModalContainer
@@ -43,7 +45,6 @@ export const FormDatePicker = () => {
           className="border-0"
           styles={{
             caption: { color: "#3b82f6" },
-            day: { margin: "0.2em" },
           }}
         />
       </ModalContainer>

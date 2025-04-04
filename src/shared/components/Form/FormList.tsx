@@ -4,22 +4,24 @@ import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
+import { TransactionType } from "@shared/types/FormTypes";
 
 interface FormListProps {
   items: string[];
   placeholder: string;
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const FormList: FC<FormListProps> = ({ items, placeholder }) => {
+const FormList: FC<FormListProps> = ({ items, placeholder, value, setValue }) => {
   const [opened, setOpened] = useState<boolean>(false);
-  const [selected, setSelected] = useState<number>(-1);
 
   return (
     <div className="relative">
       <BoxInfo style="squre">
         <div className="flex justify-between px-2 items-center h-full">
           <div className="select-none">
-            {!isNaN(Number(selected)) ? items[Number(selected)] : placeholder}
+            {!value ? placeholder : value} 
           </div>
           <div
             className="h-full w-[40px] flex justify-center items-center cursor-pointer"
@@ -47,7 +49,7 @@ const FormList: FC<FormListProps> = ({ items, placeholder }) => {
                   index !== items.length - 1 ? "border-b border-gray-100" : ""
                 }`}
                 onClick={() => {
-                  setSelected(index);
+                  setValue(item)
                   setOpened(false);
                 }}
               >

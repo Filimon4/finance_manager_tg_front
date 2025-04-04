@@ -19,17 +19,18 @@ export const FormsCofnig: FromConfig = {
   [FormType.operations]: {
     title: "Операция",
     items: [
-      { id: "operation", inputType: "operation" },
+      { id: "type", inputType: "operation" },
       { id: "amount", inputType: "number", placeholder: "Сумма" },
-      { id: "account", inputType: "list", placeholder: "Счет", listItems: [] },
+      { id: "cash_account_id", inputType: "list", placeholder: "Счет", listItems: [] },
       {
-        id: "category",
+        id: "category_id",
         inputType: "list",
         placeholder: "Категории",
         listItems: [],
       },
-      { id: "amount", inputType: "text", placeholder: "Примечание" },
+      { id: "description", inputType: "text", placeholder: "Примечание" },
       { id: "date", inputType: "date" },
+      { id: 'to_cash_account_id', inputType: 'none'}
     ],
   },
 };

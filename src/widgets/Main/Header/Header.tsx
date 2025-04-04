@@ -12,7 +12,7 @@ const Header = () => {
       onClick: () => navigate(ERoutes.settings),
       icon: <BsGear className="inline" />,
     },
-  ]
+  ];
 
   return (
     <div className="flex flex-row justify-between h-12 px-4">
@@ -28,7 +28,7 @@ const Header = () => {
         </DropdownMenu>
         <img
           className="rounded-br-ful h-[50px] w-[50px] p-1"
-          src=""
+          src="123"
           alt="Аватарка"
         />
       </div>

@@ -22,7 +22,6 @@ const Account = () => {
     }));
   };
 
-
   return (
     <div className="flex flex-col h-full py-5 text-lg">
       <div className="flex flex-2 pl-8 items-end w-full">

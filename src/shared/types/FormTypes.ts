@@ -4,7 +4,7 @@ export enum FormType {
   operations,
 }
 
-export type InputTypes = "number" | "date" | "text" | "operation" | "list";
+export type InputTypes = "number" | "date" | "text" | "operation" | "list" | "none";
 
 export type FromConfig = {
   [k in FormType]: {
@@ -21,7 +21,13 @@ export type FromConfig = {
   };
 };
 
-export enum EOperations {
-  income = "income",
-  expense = "expense",
+export enum TransactionType {
+    INCOME = "income",
+    EXPENSIVE = "expensive"
+}
+
+export enum OperationType {
+    INCOME = "income",
+    EXPENSIVE = "expensive",
+    TRANSFER = "transfer",
 }

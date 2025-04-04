@@ -29,7 +29,8 @@
       "@variables/*": ["src/shared/styles/variables.module.scss"],
       "@mixins/*": ["src/shared/styles/mixins.scss"],
       "@images/*": ["public/images/*"],
-      "@widgets/*": ["src/widgets/*"]
+      "@widgets/*": ["src/widgets/*"],
+      "@hooks/*": ["src/shared/hooks/*"],
     }
   },
   "include": ["src"]

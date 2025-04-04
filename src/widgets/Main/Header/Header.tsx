@@ -14,6 +14,10 @@ const Header = () => {
     },
   ];
 
+  const photoUrl =
+    window?.Telegram?.WebApp?.initDataUnsafe.user?.photo_url ||
+    "/icons/anonymous.png";
+
   return (
     <div className="flex flex-row justify-between h-12 px-4">
       <p
@@ -27,8 +31,8 @@ const Header = () => {
           <BsThreeDotsVertical size={25} className="cursor-pointer" />
         </DropdownMenu>
         <img
-          className="rounded-br-ful h-[50px] w-[50px] p-1"
-          src="123"
+          className="rounded-br-ful h-[45px] w-[45px] p-1 color-white"
+          src={photoUrl}
           alt="Аватарка"
         />
       </div>

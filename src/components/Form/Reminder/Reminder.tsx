@@ -1,20 +1,19 @@
 import CallbackButton from "@shared/components/Buttons/CallbackButton/CallbackButton";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
-import { FormDatePicker } from "@shared/components/Form/FormDatePicker";
-import FormInput from "@shared/components/Form/FormInput";
+import { FormDayTime } from "@shared/components/Form/FormDayTime";
 import FormList from "@shared/components/Form/FormList";
-import FormOperations from "@shared/components/Form/FormOperations";
 import { FormsConfig } from "@shared/config/formsConfig";
-import { FormType } from "@shared/types/FormTypes";
+import { FormType, ListDaysOfWeek } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Category = () => {
+const Reminder = () => {
   const navigate = useNavigate();
-  const config = FormsConfig[FormType.category];
+  const queryClient = useQueryClient();
+  const config = FormsConfig[FormType.reminder];
 
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {
@@ -31,15 +30,16 @@ const Category = () => {
     }));
   };
 
-  const createCategoryMutation = useMutation({
-    mutationFn: async (newCategory: typeof formData) => {
+  const createReminderMutation = useMutation({
+    mutationFn: async (newReminder: typeof formData) => {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/api/categories/create`,
-        newCategory
+        `${import.meta.env.VITE_BACK_END_URL}/api/reminders`,
+        newReminder
       );
       return response.data;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reminders"] });
       setFormData({
         id: null,
         cash_account_id: null,
@@ -49,21 +49,25 @@ const Category = () => {
         description: null,
         type: null,
       });
-      navigate(ERoutes.main);
+      navigate(ERoutes.reminders);
     },
     onError: (error) => {
       console.error("Error creating operation:", error);
     },
   });
 
-  const getItemsForField = (_fieldId: string) => {
+  const getItemsForField = (fieldId: string) => {
+    if (fieldId == "day_id") {
+      return ListDaysOfWeek.map((t) => t.label);
+    }
     return [];
   };
 
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
-    operationData.account_id = 1289261150;
-    createCategoryMutation.mutate(operationData);
+    operationData.id = 1289261150;
+
+    createReminderMutation.mutate(operationData);
   };
 
   return (
@@ -77,27 +81,10 @@ const Category = () => {
             <div className="space-y-4">
               {config.items.map((item, index) => (
                 <div key={index} className="mb-4">
-                  {["number", "text"].includes(item.inputType) ? (
-                    <>
-                      <FormInput
-                        placeholder={item.placeholder ?? ""}
-                        setValue={(v) => onFormChange(item.id, v)}
-                        type={item.inputType}
-                        value={formData[`${item.id}`] || ""}
-                      />
-                    </>
-                  ) : ["operation"].includes(item.inputType) ? (
-                    <>
-                      <FormOperations
-                        setValue={(v) => onFormChange(item.id, v)}
-                        value={formData[`${item.id}`] || ""}
-                      />
-                    </>
-                  ) : ["list"].includes(item.inputType) ? (
+                  {["list"].includes(item.inputType) ? (
                     <>
                       <FormList
                         setValue={(v) => {
-                          console.log(JSON.stringify(v, null, 2));
                           onFormChange(item.id, v);
                         }}
                         value={formData[item.id] || ""}
@@ -105,9 +92,9 @@ const Category = () => {
                         placeholder={String(item.placeholder)}
                       />
                     </>
-                  ) : ["date"].includes(item.inputType) ? (
+                  ) : ["day_time"].includes(item.inputType) ? (
                     <>
-                      <FormDatePicker />
+                      <FormDayTime />
                     </>
                   ) : (
                     <></>
@@ -115,9 +102,18 @@ const Category = () => {
                 </div>
               ))}
             </div>
-            <CallbackButton style="round" callback={handleSubmit}>
+
+            <CallbackButton
+              style="round"
+              callback={handleSubmit}
+              disabled={createReminderMutation.isPending}
+            >
               <div className="flex w-full justify-center items-center cursor-pointer">
-                <p>Добавить</p>
+                <p>
+                  {createReminderMutation.isPending
+                    ? "Добавление..."
+                    : "Добавить"}
+                </p>
               </div>
             </CallbackButton>
           </div>
@@ -127,4 +123,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default Reminder;

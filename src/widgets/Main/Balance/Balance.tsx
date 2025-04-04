@@ -26,7 +26,7 @@ const Balance = () => {
 
   return (
     <BalanceContainer>
-      <Mounth mounth="Январь" />
+      <Mounth mounth={new Date().getMonth()} />
       <div className="flex flex-col">
         <div className="flex flex-col items-center">
           <p className="text-[#E5D0ED]">Баланс</p>

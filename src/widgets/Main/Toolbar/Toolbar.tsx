@@ -21,7 +21,9 @@ const Toolbar = () => {
     <div className="h-full w-full flex flex-col gap-1">
       <ToolCategories />
       <WhitePanelContainer>
-        {toolbarRouter[currentCategory]}
+        <div className="w-full h-full p-1 max-h-[420px] overflow-auto overflow-x-hidden">
+          {toolbarRouter[currentCategory]}
+        </div>
       </WhitePanelContainer>
     </div>
   );

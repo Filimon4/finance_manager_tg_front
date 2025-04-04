@@ -4,7 +4,7 @@ import { FormDatePicker } from "@shared/components/Form/FormDatePicker";
 import FormInput from "@shared/components/Form/FormInput";
 import FormList from "@shared/components/Form/FormList";
 import FormOperations from "@shared/components/Form/FormOperations";
-import { FormsCofnig } from "@shared/config/formsConfig";
+import { FormsConfig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const Operation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const config = FormsCofnig[FormType.operations];
+  const config = FormsConfig[FormType.operations];
 
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {
@@ -160,7 +160,6 @@ const Operation = () => {
                     <>
                       <FormList
                         setValue={(v) => {
-                          console.log(JSON.stringify(v, null, 2));
                           onFormChange(item.id, v);
                         }}
                         value={formData[item.id] || ""}

@@ -1,10 +1,12 @@
-
 export enum ERoutes {
-  main = '/',
-  report = '/report',
-  settings = '/settings',
-  notFound = '*',
-  operation = '/operation',
-  category = '/category',
-  accounts = '/accounts'
+  main = "/",
+  report = "/report",
+  settings = "/settings",
+  operation = "/operation",
+  reminder = "/reminder",
+  category = "/category",
+  accounts = "/accounts",
+  reminders = "/reminders",
+
+  notFound = "*",
 }

@@ -13,9 +13,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Operation = () => {
-  const navigate = useNavigate()
-  const config = FormsCofnig[FormType.operations];
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const config = FormsCofnig[FormType.operations];
 
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {
@@ -41,7 +41,7 @@ const Operation = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["operations"] });
+      queryClient.invalidateQueries({ queryKey: ["balance", "operations"] });
       setFormData({
         id: null,
         cash_account_id: null,
@@ -51,7 +51,7 @@ const Operation = () => {
         description: null,
         type: null,
       });
-      navigate(ERoutes.main)
+      navigate(ERoutes.main);
     },
     onError: (error) => {
       console.error("Error creating operation:", error);
@@ -126,7 +126,6 @@ const Operation = () => {
 
     operationData.id = 1289261150;
 
-    console.log(JSON.stringify(operationData, null, 2));
     createOperationMutation.mutate(operationData);
   };
 

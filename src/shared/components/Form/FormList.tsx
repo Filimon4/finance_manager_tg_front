@@ -4,7 +4,6 @@ import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
-import { TransactionType } from "@shared/types/FormTypes";
 
 interface FormListProps {
   items: string[];

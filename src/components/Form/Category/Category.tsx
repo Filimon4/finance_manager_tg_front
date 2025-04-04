@@ -56,7 +56,7 @@ const Category = () => {
     },
   });
 
-  const getItemsForField = (fieldId: string) => {
+  const getItemsForField = (_fieldId: string) => {
     return [];
   };
 

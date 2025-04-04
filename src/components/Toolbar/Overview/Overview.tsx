@@ -3,8 +3,6 @@ import NavigationButton from "@shared/components/Buttons/NavigationButton/Naviga
 import { useToolbarCategory } from "@shared/contexts/ToolbarCategory/useToolbarCategory";
 import { ERoutes } from "@shared/types/Routes";
 import { ToolbarCategories } from "@shared/types/Toolbar";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
 const Overview = () => {
   const { setCurrentCategory } = useToolbarCategory();

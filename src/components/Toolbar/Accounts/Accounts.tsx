@@ -22,24 +22,27 @@ const Accounts = () => {
   });
 
   return (
-    <div className="flex flex-col justify-between gap-2 h-full">
-      {data &&
-      "accounts_overview" in data.data &&
-      data.data?.accounts_overview?.length > 0 ? <>
-        {data.data.accounts_overview.map((oper, i) => (
-          <BoxInfo style={"squre"} key={i}>
-            <div className="flex flex-row justify-between items-center w-full h-full px-3">
-              <p>{oper.account_name}</p>
-              <p className="text-2xl">{oper.current_balance || 0}</p>
-            </div>
-          </BoxInfo>
-        ))}
-      </> : <>
-        <p className="flex w-full justify-center">
-          Нет счетов
-        </p>
-      </>  
-      }
+    <div className="flex flex-col gap-2 justify-between h-full">
+      <div className="h-full w-full flex flex-col gap-4 overflow-x-hidden overflow-auto">
+        {data &&
+        "accounts_overview" in data.data &&
+        data.data?.accounts_overview?.length > 0 ? (
+          <>
+            {data.data.accounts_overview.map((oper, i) => (
+              <BoxInfo style={"squre"} key={i}>
+                <div className="flex flex-row justify-between items-center w-full h-full px-3">
+                  <p>{oper.account_name}</p>
+                  <p className="text-2xl">{oper.current_balance || 0}</p>
+                </div>
+              </BoxInfo>
+            ))}
+          </>
+        ) : (
+          <>
+            <p className="flex w-full justify-center">Нет счетов</p>
+          </>
+        )}
+      </div>
 
       <NavigationButton link={ERoutes.accounts} style="round">
         <div className="flex w-full justify-center items-center cursor-pointer">

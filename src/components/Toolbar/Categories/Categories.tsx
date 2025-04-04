@@ -22,21 +22,24 @@ const Categories = () => {
   });
 
   return (
-    <div className="flex flex-col justify-between gap-2 h-full">
-      {data?.data?.total_overview && data?.data?.total_overview?.length > 0 ? (
-        data?.data?.total_overview.map((data: any, i: number) => (
-          <BoxInfo style="squre" key={i}>
-            <div className="flex flex-row justify-between items-center w-full h-full px-3">
-              <p>{data.name || "Без названия"}</p>
-              <p className="text-2xl">{data.overview.balance || 0}</p>
-            </div>
-          </BoxInfo>
-        ))
-      ) : (
-        <>
-          <p className="flex w-full justify-center">Нет категорий</p>
-        </>
-      )}
+    <div className="flex flex-col gap-2 justify-between h-full">
+      <div className="h-full w-full flex flex-col gap-4 overflow-x-hidden overflow-auto">
+        {data?.data?.total_overview &&
+        data?.data?.total_overview?.length > 0 ? (
+          data?.data?.total_overview.map((data: any, i: number) => (
+            <BoxInfo style="squre" key={i}>
+              <div className="flex flex-row justify-between items-center w-full h-full px-3">
+                <p>{data.name || "Без названия"}</p>
+                <p className="text-2xl">{data.overview.balance || 0}</p>
+              </div>
+            </BoxInfo>
+          ))
+        ) : (
+          <>
+            <p className="flex w-full justify-center">Нет категорий</p>
+          </>
+        )}
+      </div>
 
       <NavigationButton link={ERoutes.category} style="round">
         <div className="flex w-full justify-center items-center cursor-pointer">

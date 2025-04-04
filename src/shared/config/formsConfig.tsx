@@ -1,6 +1,6 @@
 import { FormType, FromConfig } from "@shared/types/FormTypes";
 
-export const FormsCofnig: FromConfig = {
+export const FormsConfig: FromConfig = {
   [FormType.account]: {
     title: "Счет",
     items: [
@@ -22,7 +22,12 @@ export const FormsCofnig: FromConfig = {
     items: [
       { id: "type", inputType: "operation" },
       { id: "amount", inputType: "number", placeholder: "Сумма" },
-      { id: "cash_account_id", inputType: "list", placeholder: "Счет", listItems: [] },
+      {
+        id: "cash_account_id",
+        inputType: "list",
+        placeholder: "Счет",
+        listItems: [],
+      },
       {
         id: "category_id",
         inputType: "list",
@@ -31,7 +36,14 @@ export const FormsCofnig: FromConfig = {
       },
       { id: "description", inputType: "text", placeholder: "Примечание" },
       { id: "date", inputType: "date" },
-      { id: 'to_cash_account_id', inputType: 'none'}
+      { id: "to_cash_account_id", inputType: "none" },
     ],
   },
+  [FormType.reminder]: {
+    title: "Напоминание",
+    items: [
+      { id: "day_id", inputType: "list", placeholder: "День недели" },
+      { id: "day_time", inputType: 'day_time' },
+    ]
+  }
 };

@@ -4,7 +4,7 @@ import { FormDatePicker } from "@shared/components/Form/FormDatePicker";
 import FormInput from "@shared/components/Form/FormInput";
 import FormList from "@shared/components/Form/FormList";
 import FormOperations from "@shared/components/Form/FormOperations";
-import { FormsCofnig } from "@shared/config/formsConfig";
+import { FormsConfig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 const Account = () => {
   const navigate = useNavigate();
-  const config = FormsCofnig[FormType.account];
+  const config = FormsConfig[FormType.account];
 
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {

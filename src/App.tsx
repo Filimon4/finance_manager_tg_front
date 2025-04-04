@@ -6,6 +6,7 @@ import NotFound from "@pages/NotFound/NotFound";
 import { ERoutes } from "@shared/types/Routes";
 import Form from "@pages/Form/Form";
 import { FormType } from "@shared/types/FormTypes";
+import Reminders from "@pages/Reminders/Reminders";
 
 function App() {
   if (window?.Telegram?.WebApp) {
@@ -17,7 +18,7 @@ function App() {
       <Route path={ERoutes.main} element={<Main />} />
       <Route path={ERoutes.report} element={<Report />} />
       <Route path={ERoutes.settings} element={<Settings />} />
-      <Route path={ERoutes.notFound} element={<NotFound />} />
+      <Route path={ERoutes.reminders} element={<Reminders />} />
       <Route
         path={ERoutes.operation}
         element={<Form type={FormType.operations} />}
@@ -30,6 +31,11 @@ function App() {
         path={ERoutes.category}
         element={<Form type={FormType.category} />}
       />
+      <Route
+        path={ERoutes.reminder}
+        element={<Form type={FormType.reminder} />}
+      />
+      <Route path={ERoutes.notFound} element={<NotFound />} />
     </Routes>
   );
 }

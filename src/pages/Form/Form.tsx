@@ -1,6 +1,7 @@
 import Account from "@components/Form/Account/Account";
 import Category from "@components/Form/Category/Category";
 import Operation from "@components/Form/Operations/Operations";
+import Reminder from "@components/Form/Reminder/Reminder";
 import { MainContainer } from "@shared/components/containers/MainContainer/MainContainer";
 import { FormType } from "@shared/types/FormTypes";
 import Header from "@widgets/Main/Header/Header";
@@ -14,6 +15,7 @@ const FromTypes = {
   [FormType.account]: <Account />,
   [FormType.category]: <Category />,
   [FormType.operations]: <Operation />,
+  [FormType.reminder]: <Reminder />,
 };
 
 const Form: FC<FormProps> = ({ type }) => {

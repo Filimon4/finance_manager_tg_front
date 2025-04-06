@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@shared/lib/Tanstack/queryClient.ts";
 import "react-loading-skeleton/dist/skeleton.css";
+import "react-day-picker/style.css";
 
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>

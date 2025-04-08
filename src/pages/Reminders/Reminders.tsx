@@ -6,13 +6,15 @@ import { ERoutes } from "@shared/types/Routes";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@widgets/Main/Header/Header";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Reminders = () => {
-  const { data: allReminders } = useQuery<{ data: { all: any[] } }>({
+  const navigate = useNavigate();
+  const { data: allReminders } = useQuery<{ data: { reminders: any[] } }>({
     queryKey: ["reminders"],
     queryFn: async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/api/reminders/all`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/reminders/users_reminders`,
         {
           params: {
             // tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
@@ -36,14 +38,24 @@ const Reminders = () => {
           <div className="h-full w-full flex flex-col flex-8 gap-1">
             <WhitePanelContainer>
               <div className="h-full flex flex-col justify-between gap-5">
-                <div>
+                <div className="h-full w-ful flex flex-col justify-start gap-5">
                   {allReminders &&
-                  "operations" in allReminders.data &&
-                  allReminders.data?.all?.length > 0 ? (
-                    allReminders.data.all.map((_rem, i) => (
+                  "reminders" in allReminders.data &&
+                  allReminders.data?.reminders?.length > 0 ? (
+                    allReminders.data.reminders.map((rem, i) => (
                       <BoxInfo style={"squre"} key={i}>
-                        <div className="flex flex-row justify-between items-center w-full h-full px-3">
-                          <p>{"Пон. 10:00"}</p>
+                        <div
+                          className="flex flex-row justify-between items-center w-full h-full px-3 cursor-pointer"
+                          onClick={(e) => {
+                            navigate(ERoutes.edit_reminder, {
+                              state: { id: rem.id },
+                            });
+                          }}
+                        >
+                          <p>
+                            {rem.hour} {rem.day_of_week} -{" "}
+                            {String(Boolean(rem.is_acitve))}
+                          </p>
                         </div>
                       </BoxInfo>
                     ))

@@ -28,14 +28,25 @@ const Accounts = () => {
         "accounts_overview" in data.data &&
         data.data?.accounts_overview?.length > 0 ? (
           <>
-            {data.data.accounts_overview.map((oper, i) => (
-              <BoxInfo style={"squre"} key={i}>
-                <div className="flex flex-row justify-between items-center w-full h-full px-3">
-                  <p>{oper.account_name}</p>
-                  <p className="text-2xl">{oper.current_balance || 0}</p>
-                </div>
-              </BoxInfo>
-            ))}
+            {data.data.accounts_overview.map((oper, i) => {
+              const isIncome = oper.current_balance >= 0;
+              const amountPrefix = isIncome ? "+" : "-";
+
+              return (
+                <BoxInfo style={"squre"} key={i}>
+                  <div className="flex flex-row justify-between items-center w-full h-full px-3">
+                    <p>{oper.account_name}</p>
+                    <p
+                      className={`text-2xl ${
+                        isIncome ? "text-green-500" : "text-red-500"
+                      }`}
+                    >
+                      {amountPrefix} {Math.abs(oper.current_balance) || 0}
+                    </p>
+                  </div>
+                </BoxInfo>
+              );
+            })}
           </>
         ) : (
           <>

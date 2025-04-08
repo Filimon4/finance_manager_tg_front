@@ -42,8 +42,19 @@ export const FormsConfig: FromConfig = {
   [FormType.reminder]: {
     title: "Напоминание",
     items: [
-      { id: "day_id", inputType: "list", placeholder: "День недели" },
-      { id: "day_time", inputType: 'day_time' },
+      { id: "account_id", inputType: "none" },
+      { id: "day_of_week", inputType: "list", placeholder: "День недели" },
+      { id: "hour", inputType: 'day_time' },
+      { id: "is_active", inputType: 'boolean' },
+    ]
+  },
+  [FormType.edit_reminder]: {
+    title: "Изминение напоминаний",
+    items: [
+      { id: "id", inputType: "none" },
+      { id: "day_of_week", inputType: "list", placeholder: "День недели" },
+      { id: "hour", inputType: 'day_time' },
+      { id: "is_active", inputType: 'boolean' },
     ]
   }
 };

@@ -2,7 +2,8 @@ export enum FormType {
   category,
   account,
   operations,
-  reminder
+  reminder,
+  edit_reminder
 }
 
 export type InputTypes = "number" | "date" | "text" | "operation" | "list" | 'boolean' | 'day_time' | "none";

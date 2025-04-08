@@ -53,9 +53,14 @@ const Reminders = () => {
                           }}
                         >
                           <p>
-                            {rem.hour} {rem.day_of_week} -{" "}
-                            {String(Boolean(rem.is_acitve))}
+                            {rem.hour} {rem.day_of_week}
                           </p>
+                          <div
+                            className={`
+                              w-5 h-5 rounded-full cursor-pointer transition-colors duration-300
+                              ${rem.is_acitve ? "bg-green-500" : "bg-red-500"}
+                            `}
+                          />
                         </div>
                       </BoxInfo>
                     ))

@@ -8,7 +8,7 @@ import { FormType, ListDaysOfWeek } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const EditReminder = () => {
@@ -45,7 +45,7 @@ const EditReminder = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reminders"] });
       setFormData({
-        account_id: null,
+        id: null,
         day_of_week: null,
         hour: null,
         is_active: null,
@@ -87,7 +87,6 @@ const EditReminder = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/reminders/one`,
         {
           params: {
-            // tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
             id: currentReminderId,
           },
         }
@@ -97,13 +96,13 @@ const EditReminder = () => {
   });
 
   useEffect(() => {
-    console.log(JSON.stringify(currentReminder, null, 2))
     if (!currReminderIsSuccess) return
+    const reminder = currentReminder.data.reminder
     setFormData({
-      id: +(currentReminder.id),
-      day_of_week: currentReminder.day_of_week,
-      hour: +(currentReminder.hour),
-      is_active: currentReminder.is_active,
+      id: +(reminder.id),
+      day_of_week: ListDaysOfWeek.find(d => d.id == String(reminder.day_of_week).toLowerCase())?.label,
+      hour: +(reminder.hour),
+      is_active: reminder.is_active,
     });
   }, [currReminderIsSuccess])
 
@@ -119,8 +118,11 @@ const EditReminder = () => {
   };
   
   const handleChangeSubmit = () => {
+    if (!currentReminder) return
     const operationData = structuredClone(formData);
-    
+    operationData.id = currentReminderId
+    operationData.hour = `${operationData.hour}`
+    operationData.day_of_week = ListDaysOfWeek.find(d => d.label == operationData.day_of_week)?.id || null
     changeReminderMutation.mutate(operationData)
   }
 

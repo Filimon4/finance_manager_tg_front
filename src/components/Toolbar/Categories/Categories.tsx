@@ -26,14 +26,25 @@ const Categories = () => {
       <div className="h-full w-full flex flex-col gap-4 overflow-x-hidden overflow-auto">
         {data?.data?.total_overview &&
         data?.data?.total_overview?.length > 0 ? (
-          data?.data?.total_overview.map((data: any, i: number) => (
-            <BoxInfo style="squre" key={i}>
-              <div className="flex flex-row justify-between items-center w-full h-full px-3">
-                <p>{data.name || "Без названия"}</p>
-                <p className="text-2xl">{data.overview.balance || 0}</p>
-              </div>
-            </BoxInfo>
-          ))
+          data?.data?.total_overview.map((data: any, i: number) => {
+            const isIncome = data.overview.balance >= 0;
+            const amountPrefix = isIncome ? "+" : "-";
+
+            return (
+              <BoxInfo style="squre" key={i}>
+                <div className="flex flex-row justify-between items-center w-full h-full px-3">
+                  <p>{data.name || "Без названия"}</p>
+                  <p
+                    className={`text-2xl ${
+                      isIncome ? "text-green-500" : "text-red-500"
+                    }`}
+                  >
+                    {amountPrefix} {Math.abs(data.overview.balance) || 0}
+                  </p>
+                </div>
+              </BoxInfo>
+            );
+          })
         ) : (
           <>
             <p className="flex w-full justify-center">Нет категорий</p>

@@ -2,7 +2,8 @@ export enum FormType {
   category,
   account,
   operations,
-  reminder
+  reminder,
+  edit_reminder
 }
 
 export type InputTypes = "number" | "date" | "text" | "operation" | "list" | 'boolean' | 'day_time' | "none";
@@ -24,8 +25,9 @@ export type FromConfig = {
 };
 
 export enum TransactionType {
-    INCOME = "income",
-    EXPENSIVE = "expensive"
+  EXPENSIVE = 'expensive',
+  INCOME = 'income',
+  TRANSFER = 'transfer'
 }
 
 export enum OperationType {

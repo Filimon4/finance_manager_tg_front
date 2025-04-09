@@ -44,7 +44,7 @@ const Balance = () => {
         />
         <div className="flex flex-row w-full justify-between items-center text-[#664972]">
           <div className="flex flex-col">
-            <p className="self-center">Баланс</p>
+            <p className="self-center">Расходы</p>
             <div className="flex flex-row justify-center gap-0.5 items-center">
               <TbSquareRoundedArrowDown
                 size={25}
@@ -59,7 +59,7 @@ const Balance = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            <p className="self-center">Баланс</p>
+            <p className="self-center">Доходы</p>
             <div className="flex flex-row justify-center gap-0.5 items-center">
               <TbSquareRoundedArrowUp
                 size={25}

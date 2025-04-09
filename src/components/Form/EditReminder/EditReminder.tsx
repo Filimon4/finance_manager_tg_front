@@ -6,15 +6,18 @@ import FormList from "@shared/components/Form/FormList";
 import { FormsConfig } from "@shared/config/formsConfig";
 import { FormType, ListDaysOfWeek } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const Reminder = () => {
+const EditReminder = () => {
+  const { state } = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const config = FormsConfig[FormType.reminder];
+  const config = FormsConfig[FormType.edit_reminder];
+
+  const { id: currentReminderId } = state;
 
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {
@@ -30,15 +33,39 @@ const Reminder = () => {
     }));
   };
 
-  const createReminderMutation = useMutation({
-    mutationFn: async (newReminder: typeof formData) => {
-      const response = await axios.post(
+
+  const deleteReminderMutation = useMutation({
+    mutationFn: async (reminder: typeof formData) => {
+      const response = await axios.delete(
         `${import.meta.env.VITE_BACK_END_URL}/api/reminders`,
-        newReminder
+        reminder
       );
       return response.data;
     },
-    onSuccess: (_data: any) => {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reminders"] });
+      setFormData({
+        id: null,
+        day_of_week: null,
+        hour: null,
+        is_active: null,
+      });
+      navigate(ERoutes.reminders);
+    },
+    onError: (error) => {
+      console.error("Error creating operation:", error);
+    },
+  });
+
+  const changeReminderMutation = useMutation({
+    mutationFn: async (reminder: typeof formData) => {
+      const response = await axios.patch(
+        `${import.meta.env.VITE_BACK_END_URL}/api/reminders`,
+        reminder
+      );
+      return response.data;
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reminders"] });
       setFormData({
         account_id: null,
@@ -53,6 +80,32 @@ const Reminder = () => {
     },
   });
 
+  const { data: currentReminder, isSuccess: currReminderIsSuccess } = useQuery<any>({
+    queryKey: ["currentReminder"],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACK_END_URL}/api/reminders/one`,
+        {
+          params: {
+            id: currentReminderId,
+          },
+        }
+      );
+      return res;
+    },
+  });
+
+  useEffect(() => {
+    if (!currReminderIsSuccess) return
+    const reminder = currentReminder.data.reminder
+    setFormData({
+      id: +(reminder.id),
+      day_of_week: ListDaysOfWeek.find(d => d.id == String(reminder.day_of_week).toLowerCase())?.label,
+      hour: +(reminder.hour),
+      is_active: reminder.is_active,
+    });
+  }, [currReminderIsSuccess])
+
   const getItemsForField = (fieldId: string) => {
     if (fieldId == "day_of_week") {
       return ListDaysOfWeek.map((t) => t.label);
@@ -60,21 +113,18 @@ const Reminder = () => {
     return [];
   };
 
-  const handleSubmit = () => {
-    const operationData = structuredClone(formData);
-    operationData.account_id = 1289261150;
-    operationData.is_active = !!operationData.is_active;
-    operationData.day_of_week =
-      ListDaysOfWeek.find((t) => t.label == operationData.day_of_week)?.id ||
-      null;
-
-    if (!operationData.day_of_week || !operationData.hour) return;
-
-    operationData.hour = `${operationData.hour}`;
-
-    console.log("operationData: ", JSON.stringify(operationData, null, 2));
-    createReminderMutation.mutate(operationData);
+  const handleDeleteSubmit = () => {
+    deleteReminderMutation.mutate({ id: currentReminderId });
   };
+  
+  const handleChangeSubmit = () => {
+    if (!currentReminder) return
+    const operationData = structuredClone(formData);
+    operationData.id = currentReminderId
+    operationData.hour = `${operationData.hour}`
+    operationData.day_of_week = ListDaysOfWeek.find(d => d.label == operationData.day_of_week)?.id || null
+    changeReminderMutation.mutate(operationData)
+  }
 
   return (
     <div className="p-4 flex flex-col justify-between h-full">
@@ -125,19 +175,34 @@ const Reminder = () => {
               ))}
             </div>
 
-            <CallbackButton
-              style="round"
-              callback={handleSubmit}
-              disabled={createReminderMutation.isPending}
-            >
-              <div className="flex w-full justify-center items-center cursor-pointer">
-                <p>
-                  {createReminderMutation.isPending
-                    ? "Добавление..."
-                    : "Добавить"}
-                </p>
-              </div>
-            </CallbackButton>
+            <div className="flex flex-col justify-center gap-5">
+              <CallbackButton
+                style="round"
+                callback={handleDeleteSubmit}
+                disabled={deleteReminderMutation.isPending}
+              >
+                <div className="flex w-full justify-center items-center cursor-pointer">
+                  <p>
+                    {deleteReminderMutation.isPending
+                      ? "Удаление..."
+                      : "Удалить"}
+                  </p>
+                </div>
+              </CallbackButton>
+              <CallbackButton
+                style="round"
+                callback={handleChangeSubmit}
+                disabled={deleteReminderMutation.isPending}
+              >
+                <div className="flex w-full justify-center items-center cursor-pointer">
+                  <p>
+                    {deleteReminderMutation.isPending
+                      ? "Изменение..."
+                      : "Изменить"}
+                  </p>
+                </div>
+              </CallbackButton>
+            </div>
           </div>
         </WhitePanelContainer>
       </div>
@@ -145,4 +210,4 @@ const Reminder = () => {
   );
 };
 
-export default Reminder;
+export default EditReminder;

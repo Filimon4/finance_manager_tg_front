@@ -21,9 +21,16 @@ export const FormsConfig: FromConfig = {
     title: "Операция",
     items: [
       { id: "type", inputType: "operation" },
+      { id: "name", inputType: "text", placeholder: "Название" },
       { id: "amount", inputType: "number", placeholder: "Сумма" },
       {
         id: "cash_account_id",
+        inputType: "list",
+        placeholder: "Счет",
+        listItems: [],
+      },
+      {
+        id: "to_cash_account_id",
         inputType: "list",
         placeholder: "Счет",
         listItems: [],
@@ -36,14 +43,24 @@ export const FormsConfig: FromConfig = {
       },
       { id: "description", inputType: "text", placeholder: "Примечание" },
       { id: "date", inputType: "date" },
-      { id: "to_cash_account_id", inputType: "none" },
     ],
   },
   [FormType.reminder]: {
     title: "Напоминание",
     items: [
-      { id: "day_id", inputType: "list", placeholder: "День недели" },
-      { id: "day_time", inputType: 'day_time' },
-    ]
-  }
+      { id: "account_id", inputType: "none" },
+      { id: "day_of_week", inputType: "list", placeholder: "День недели" },
+      { id: "hour", inputType: "day_time" },
+      { id: "is_active", inputType: "boolean" },
+    ],
+  },
+  [FormType.edit_reminder]: {
+    title: "Изминение напоминаний",
+    items: [
+      { id: "id", inputType: "none" },
+      { id: "day_of_week", inputType: "list", placeholder: "День недели" },
+      { id: "hour", inputType: "day_time" },
+      { id: "is_active", inputType: "boolean" },
+    ],
+  },
 };

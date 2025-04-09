@@ -26,9 +26,9 @@ export const DropdownMenu = ({ items, children }: DropdownMenuProps) => {
       >
         {children}
       </button>
-      
+
       {isOpen && (
-        <div className="absolute mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+        <div className="absolute mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200 right-[50%]">
           <div className="py-1">
             {items.map((item, index) => (
               <button

@@ -7,6 +7,7 @@ export enum ERoutes {
   category = "/category",
   accounts = "/accounts",
   reminders = "/reminders",
+  edit_reminder = "/edit_reminder",
 
   notFound = "*",
 }

@@ -5,7 +5,7 @@ import FormInput from "@shared/components/Form/FormInput";
 import FormList from "@shared/components/Form/FormList";
 import FormOperations from "@shared/components/Form/FormOperations";
 import { FormsConfig } from "@shared/config/formsConfig";
-import { FormType } from "@shared/types/FormTypes";
+import { FormType, TransactionType } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -26,10 +26,19 @@ const Operation = () => {
 
   const onFormChange = (fieldName: string, value: any) => {
     console.log("onFormChange: ", fieldName, value);
-    setFormData((prev) => ({
-      ...prev,
-      [fieldName]: value,
-    }));
+    if (fieldName == 'type') {
+      setFormData((prev) => ({
+        ...prev,
+        category_id: null,
+        to_cash_account_id: null,
+        [fieldName]: value,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [fieldName]: value,
+      }));
+    }
   };
 
   const createOperationMutation = useMutation({
@@ -93,7 +102,7 @@ const Operation = () => {
   });
 
   const getItemsForField = (fieldId: string) => {
-    if (fieldId === "cash_account_id") {
+    if (fieldId === "cash_account_id" || fieldId === "to_cash_account_id") {
       return (
         allCashAccounts?.data?.all.map((t: any) => t?.name || "none") || []
       );
@@ -106,6 +115,8 @@ const Operation = () => {
 
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
+    if (isNaN(operationData.amount)) return;
+    operationData.amount = Number(operationData.amount)
     operationData.date = operationData.date
       ? operationData.date
       : new Date().toJSON();
@@ -116,6 +127,12 @@ const Operation = () => {
           (t: any) => t.name === operationData.cash_account_id
         ).id || null;
     }
+    if (operationData.to_cash_account_id) {
+      operationData.to_cash_account_id =
+        allCashAccounts?.data?.all.find(
+          (t: any) => t.name === operationData.to_cash_account_id
+        ).id || null;
+    }
 
     if (operationData.category_id) {
       operationData.category_id =
@@ -124,9 +141,37 @@ const Operation = () => {
         ).id || null;
     }
 
-    operationData.id = 1289261150;
+    operationData.account_id = 1289261150;
 
     createOperationMutation.mutate(operationData);
+  };
+
+  const getVisibleFields = () => {
+    const { type } = formData;
+
+    if (type === TransactionType.TRANSFER) {
+      return config.items.filter(
+        (item) =>
+          item.id === "name" ||
+          item.id === "type" ||
+          item.id === "amount" ||
+          item.id === "cash_account_id" ||
+          item.id === "to_cash_account_id" ||
+          item.id === "description" ||
+          item.id === "date"
+      );
+    } else {
+      return config.items.filter(
+        (item) =>
+          item.id === "name" ||
+          item.id === "type" ||
+          item.id === "amount" ||
+          item.id === "cash_account_id" ||
+          item.id === "category_id" ||
+          item.id === "description" ||
+          item.id === "date"
+      );
+    }
   };
 
   return (
@@ -138,7 +183,7 @@ const Operation = () => {
         <WhitePanelContainer>
           <div className="p-4 flex flex-col justify-between h-full">
             <div className="space-y-4">
-              {config.items.map((item, index) => (
+              {getVisibleFields().map((item, index) => (
                 <div key={index} className="mb-4">
                   {["number", "text"].includes(item.inputType) ? (
                     <>

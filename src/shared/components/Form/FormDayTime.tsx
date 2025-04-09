@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import BoxInfo from "../Info/BoxInfo/BoxInfo";
 import { ModalContainer } from "../containers/ModalContainer/ModalContainer";
 import useClickOutside from "@shared/hooks/useClickOutside";
 import { FaClock } from "react-icons/fa";
 
-export const FormDayTime = () => {
-  const [selectedHour, setSelectedHour] = useState<number | null>(null);
+interface FormDayTimeProps {
+  title: string;
+  value: number;
+  setValue: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export const FormDayTime: FC<FormDayTimeProps> = ({setValue, title, value}) => {
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useClickOutside({ 
     onClick: () => setIsOpen(false) 
@@ -18,7 +23,7 @@ export const FormDayTime = () => {
       <BoxInfo style="squre">
         <div className="w-full h-full flex justify-between items-center px-4">
           <span>
-            {selectedHour !== null ? `${selectedHour}:00` : "Время не выбрано"}
+            {value ? `${value}:00` : "Время не выбрано"}
           </span>
           <button
             onClick={() => setIsOpen(true)}
@@ -35,17 +40,17 @@ export const FormDayTime = () => {
         ref={modalRef as unknown as React.RefObject<HTMLElement>}
       >
         <div className="p-4">
-          <h3 className="text-lg font-medium text-center mb-4">Выберите час</h3>
+          <h3 className="text-lg font-medium text-center mb-4">{title}</h3>
           <div className="grid grid-cols-4 gap-2">
             {hours.map((hour) => (
               <button
                 key={hour}
                 onClick={() => {
-                  setSelectedHour(hour);
+                  setValue(+hour);
                   setIsOpen(false);
                 }}
                 className={`py-2 px-3 rounded-md transition-colors ${
-                  selectedHour === hour
+                  +value === hour
                     ? "bg-blue-500 text-white"
                     : "bg-gray-100 hover:bg-gray-200"
                 }`}

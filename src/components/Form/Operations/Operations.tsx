@@ -74,8 +74,7 @@ const Operation = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/categories/all`,
         {
           params: {
-            // tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
-            tg_id: 1289261150,
+            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -91,8 +90,7 @@ const Operation = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/all`,
         {
           params: {
-            // tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
-            tg_id: 1289261150,
+            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -141,7 +139,7 @@ const Operation = () => {
         ).id || null;
     }
 
-    operationData.account_id = 1289261150;
+    operationData.account_id = window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
 
     createOperationMutation.mutate(operationData);
   };

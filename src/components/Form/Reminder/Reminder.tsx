@@ -62,7 +62,7 @@ const Reminder = () => {
 
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
-    operationData.account_id = 1289261150;
+    operationData.account_id = window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
     operationData.is_active = !!operationData.is_active;
     operationData.day_of_week =
       ListDaysOfWeek.find((t) => t.label == operationData.day_of_week)?.id ||

@@ -29,6 +29,15 @@ const FormOperations: FC<FormOperationsProps> = ({ setValue, value }) => {
           <img src="123" alt="" />
           <p>Доход</p>
         </div>
+        <div
+          className={`w-full h-full self-center flex flex-row items-center justify-center flex-1 cursor-pointer p-2 transition-colors rounded-2xl ${
+            value === TransactionType.TRANSFER && "bg-gray-100"
+          }`}
+          onClick={() => setValue(TransactionType.TRANSFER)}
+        >
+          <img src="123" alt="" />
+          <p>Перевод</p>
+        </div>
       </div>
     </BoxInfo>
   );

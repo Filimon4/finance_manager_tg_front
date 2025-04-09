@@ -6,7 +6,7 @@ import FormList from "@shared/components/Form/FormList";
 import { FormsConfig } from "@shared/config/formsConfig";
 import { FormType, ListDaysOfWeek } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +38,7 @@ const Reminder = () => {
       );
       return response.data;
     },
-    onSuccess: (data: any) => {
+    onSuccess: (_data: any) => {
       queryClient.invalidateQueries({ queryKey: ["reminders"] });
       setFormData({
         account_id: null,

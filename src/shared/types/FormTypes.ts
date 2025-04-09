@@ -25,8 +25,9 @@ export type FromConfig = {
 };
 
 export enum TransactionType {
-    INCOME = "income",
-    EXPENSIVE = "expensive"
+  EXPENSIVE = 'expensive',
+  INCOME = 'income',
+  TRANSFER = 'transfer'
 }
 
 export enum OperationType {

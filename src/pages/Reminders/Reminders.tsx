@@ -46,7 +46,7 @@ const Reminders = () => {
                       <BoxInfo style={"squre"} key={i}>
                         <div
                           className="flex flex-row justify-between items-center w-full h-full px-3 cursor-pointer"
-                          onClick={(e) => {
+                          onClick={(_e) => {
                             navigate(ERoutes.edit_reminder, {
                               state: { id: rem.id },
                             });

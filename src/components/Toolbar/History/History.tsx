@@ -11,7 +11,7 @@ const History = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/operations`,
         {
           params: {
-            tg_id: 1289261150,
+            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );

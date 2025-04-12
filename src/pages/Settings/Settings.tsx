@@ -3,12 +3,16 @@ import { MainContainer } from "@shared/components/containers/MainContainer/MainC
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
 import { ERoutes } from "@shared/types/Routes";
 import Header from "@widgets/Main/Header/Header";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
   const navigator = useNavigate();
 
+  const [data, setData] = useState<any>()
+
   const onExportClick = () => {
+    setData(window.Telegram.WebApp.initDataUnsafe.user?.id || null)
     window.Telegram.WebApp.sendData(JSON.stringify({
       action: 'export_data'
     }, null, 2));
@@ -30,7 +34,7 @@ const Settings = () => {
                   style="squre"
                 >
                   <div className="w-full h-full flex justify-start items-center px-2 cursor-pointer">
-                    <p>Экспорт в exel</p>
+                    <p>Экспорт в exel {JSON.stringify(data, null, 2)}</p>
                   </div>
                 </CallbackButton>
                 <CallbackButton

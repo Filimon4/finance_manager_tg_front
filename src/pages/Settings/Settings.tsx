@@ -2,29 +2,16 @@ import CallbackButton from "@shared/components/Buttons/CallbackButton/CallbackBu
 import { MainContainer } from "@shared/components/containers/MainContainer/MainContainer";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
 import { ERoutes } from "@shared/types/Routes";
-import { useMutation } from "@tanstack/react-query";
 import Header from "@widgets/Main/Header/Header";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
   const navigator = useNavigate();
 
-  const createCategoryMutation = useMutation({
-    mutationFn: async () => {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/api/export/export_request`
-      );
-      return response.data;
-    },
-    onSuccess: () => {},
-    onError: (error) => {
-      console.error("Error creating operation:", error);
-    },
-  });
-
   const onExportClick = () => {
-    createCategoryMutation.mutate()
+    window.Telegram.WebApp.sendData(JSON.stringify({
+      action: 'export_data'
+    }, null, 2));
   }
 
   return (
@@ -39,10 +26,10 @@ const Settings = () => {
             <WhitePanelContainer>
               <div className="p-4 flex flex-col h-full gap-4">
                 <CallbackButton
-                  callback={() => console.log("buttons")}
+                  callback={() => onExportClick()}
                   style="squre"
                 >
-                  <div className="w-full h-full flex justify-start items-center px-2 cursor-pointer" onClick={onExportClick}>
+                  <div className="w-full h-full flex justify-start items-center px-2 cursor-pointer">
                     <p>Экспорт в exel</p>
                   </div>
                 </CallbackButton>

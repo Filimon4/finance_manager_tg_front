@@ -1,5 +1,7 @@
 import Account from "@components/Form/Account/Account";
 import Category from "@components/Form/Category/Category";
+import EditAccount from "@components/Form/EditAccount/EditAccount";
+import EditCategory from "@components/Form/EditCategory/EditCategory";
 import EditReminder from "@components/Form/EditReminder/EditReminder";
 import Operation from "@components/Form/Operations/Operations";
 import Reminder from "@components/Form/Reminder/Reminder";
@@ -17,7 +19,9 @@ const FromTypes = {
   [FormType.category]: <Category />,
   [FormType.operations]: <Operation />,
   [FormType.reminder]: <Reminder />,
-  [FormType.edit_reminder]: <EditReminder />
+  [FormType.edit_reminder]: <EditReminder />,
+  [FormType.edit_account]: <EditAccount />,
+  [FormType.edit_category]: <EditCategory />,
 };
 
 const Form: FC<FormProps> = ({ type }) => {

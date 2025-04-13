@@ -3,8 +3,10 @@ import BoxInfo from "@shared/components/Info/BoxInfo/BoxInfo";
 import { ERoutes } from "@shared/types/Routes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Categories = () => {
+  const navigate = useNavigate();
   const { data } = useQuery<{ data: { total_overview: any[] } }>({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -12,7 +14,8 @@ const Categories = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/categories/overview`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+            tg_id:
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -32,7 +35,12 @@ const Categories = () => {
 
             return (
               <BoxInfo style="squre" key={i}>
-                <div className="flex flex-row justify-between items-center w-full h-full px-3">
+                <div
+                  className="flex flex-row justify-between items-center w-full h-full px-3 cursor-pointer"
+                  onClick={() =>
+                    navigate(ERoutes.edit_category, { state: { id: data.id } })
+                  }
+                >
                   <p>{data.name || "Без названия"}</p>
                   <p
                     className={`text-2xl ${

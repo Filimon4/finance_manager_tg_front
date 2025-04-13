@@ -7,15 +7,15 @@ import FormOperations from "@shared/components/Form/FormOperations";
 import { FormsConfig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Account = () => {
+const EditCategory = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const config = FormsConfig[FormType.account];
+  const config = FormsConfig[FormType.edit_category];
 
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {
@@ -25,22 +25,24 @@ const Account = () => {
   );
 
   const onFormChange = (fieldName: string, value: any) => {
+    console.log("onFormChange: ", fieldName, value);
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,
     }));
   };
 
-  const createAccountMutation = useMutation({
-    mutationFn: async (newCashAccount: typeof formData) => {
+  const createCategoryMutation = useMutation({
+    mutationFn: async (newCategory: typeof formData) => {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/create`,
-        newCashAccount
+        `${import.meta.env.VITE_BACK_END_URL}/api/categories/create`,
+        newCategory
       );
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cashAccounts"] });
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+
       setFormData({
         id: null,
         cash_account_id: null,
@@ -57,43 +59,18 @@ const Account = () => {
     },
   });
 
-  const { data: allCurrencies } = useQuery({
-    queryKey: ["allCurrencies"],
-    queryFn: async () => {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/api/currencies/all`
-      );
-      return res;
-    },
-    staleTime: 1200000,
-  });
-
-  const handleSubmit = () => {
-    const operationData = structuredClone(formData);
-    operationData.account_id =
-      window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
-
-    if (operationData.currency_id) {
-      operationData.currency_id =
-        allCurrencies?.data?.all.find(
-          (t: any) => t.code === operationData.currency_id
-        ).symbol_native || null;
-    }
-    createAccountMutation.mutate(operationData);
-  };
-
-  const getItemsForField = (fieldId: string) => {
-    if (fieldId === "currency_id") {
-      return (
-        allCurrencies?.data?.all.map((t: any) => t?.symbol || "none") ||
-        []
-      );
-    }
+  const getItemsForField = (_fieldId: string) => {
     return [];
   };
 
+  const handleSubmit = () => {
+    const operationData = structuredClone(formData);
+    operationData.account_id = window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
+    createCategoryMutation.mutate(operationData);
+  };
+
   return (
-    <div className="flex flex-col h-full py-5 text-lg">
+    <div className="p-4 flex flex-col justify-between h-full">
       <div className="flex flex-2 pl-8 items-end w-full">
         <h1 className="pb-7 text-3xl">{config.title}</h1>
       </div>
@@ -123,6 +100,7 @@ const Account = () => {
                     <>
                       <FormList
                         setValue={(v) => {
+                          console.log(JSON.stringify(v, null, 2));
                           onFormChange(item.id, v);
                         }}
                         value={formData[item.id] || ""}
@@ -140,7 +118,6 @@ const Account = () => {
                 </div>
               ))}
             </div>
-
             <CallbackButton style="round" callback={handleSubmit}>
               <div className="flex w-full justify-center items-center cursor-pointer">
                 <p>Добавить</p>
@@ -153,4 +130,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default EditCategory;

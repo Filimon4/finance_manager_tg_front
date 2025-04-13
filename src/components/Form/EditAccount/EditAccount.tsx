@@ -12,10 +12,10 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Account = () => {
+const EditAccount = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const config = FormsConfig[FormType.account];
+  const config = FormsConfig[FormType.edit_account];
 
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {
@@ -153,4 +153,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default EditAccount;

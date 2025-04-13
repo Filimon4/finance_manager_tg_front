@@ -2,23 +2,38 @@ import { FormType, FromConfig } from "@shared/types/FormTypes";
 
 export const FormsConfig: FromConfig = {
   [FormType.account]: {
-    title: "Счет",
+    title: "Новый счет",
     items: [
       { id: "account_id", inputType: "none" },
       { id: "name", inputType: "text", placeholder: "Название" },
       { id: "currency_id", inputType: "list", placeholder: "Валюта" },
     ],
   },
+  [FormType.edit_account]: {
+    title: "Изменить счет",
+    items: [
+      { id: "id", inputType: "none" },
+      { id: "name", inputType: "text", placeholder: "Название" },
+    ],
+  },
   [FormType.category]: {
-    title: "Категория",
+    title: "Новая категория",
     items: [
       { id: "base_type", inputType: "operation" },
       { id: "name", inputType: "text", placeholder: "Название" },
       { id: "account_id", inputType: "none" },
     ],
   },
+  [FormType.edit_category]: {
+    title: "Изменить категорию",
+    items: [
+      { id: "id", inputType: "none" },
+      { id: "base_type", inputType: "operation" },
+      { id: "name", inputType: "text", placeholder: "Название" },
+    ],
+  },
   [FormType.operations]: {
-    title: "Операция",
+    title: "Новая операция",
     items: [
       { id: "type", inputType: "operation" },
       { id: "name", inputType: "text", placeholder: "Название" },
@@ -46,7 +61,7 @@ export const FormsConfig: FromConfig = {
     ],
   },
   [FormType.reminder]: {
-    title: "Напоминание",
+    title: "Новое напоминание",
     items: [
       { id: "account_id", inputType: "none" },
       { id: "day_of_week", inputType: "list", placeholder: "День недели" },
@@ -55,7 +70,7 @@ export const FormsConfig: FromConfig = {
     ],
   },
   [FormType.edit_reminder]: {
-    title: "Изминение напоминаний",
+    title: "Изменить напоминание",
     items: [
       { id: "id", inputType: "none" },
       { id: "day_of_week", inputType: "list", placeholder: "День недели" },

@@ -33,12 +33,17 @@ const EditReminder = () => {
     }));
   };
 
-
   const deleteReminderMutation = useMutation({
     mutationFn: async (reminder: typeof formData) => {
+      console.log(JSON.stringify(reminder, null, 2));
       const response = await axios.delete(
         `${import.meta.env.VITE_BACK_END_URL}/api/reminders`,
-        reminder
+        {
+          method: "delete",
+          params: {
+            id: reminder.id,
+          },
+        }
       );
       return response.data;
     },
@@ -80,31 +85,34 @@ const EditReminder = () => {
     },
   });
 
-  const { data: currentReminder, isSuccess: currReminderIsSuccess } = useQuery<any>({
-    queryKey: ["currentReminder"],
-    queryFn: async () => {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/api/reminders/one`,
-        {
-          params: {
-            id: currentReminderId,
-          },
-        }
-      );
-      return res;
-    },
-  });
+  const { data: currentReminder, isSuccess: currReminderIsSuccess } =
+    useQuery<any>({
+      queryKey: ["currentReminder"],
+      queryFn: async () => {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACK_END_URL}/api/reminders/one`,
+          {
+            params: {
+              id: currentReminderId,
+            },
+          }
+        );
+        return res;
+      },
+    });
 
   useEffect(() => {
-    if (!currReminderIsSuccess) return
-    const reminder = currentReminder.data.reminder
+    if (!currReminderIsSuccess) return;
+    const reminder = currentReminder.data.reminder;
     setFormData({
-      id: +(reminder.id),
-      day_of_week: ListDaysOfWeek.find(d => d.id == String(reminder.day_of_week).toLowerCase())?.label,
-      hour: +(reminder.hour),
+      id: +reminder.id,
+      day_of_week: ListDaysOfWeek.find(
+        (d) => d.id == String(reminder.day_of_week).toLowerCase()
+      )?.label,
+      hour: +reminder.hour,
       is_active: reminder.is_active,
     });
-  }, [currReminderIsSuccess])
+  }, [currReminderIsSuccess]);
 
   const getItemsForField = (fieldId: string) => {
     if (fieldId == "day_of_week") {
@@ -116,15 +124,17 @@ const EditReminder = () => {
   const handleDeleteSubmit = () => {
     deleteReminderMutation.mutate({ id: currentReminderId });
   };
-  
+
   const handleChangeSubmit = () => {
-    if (!currentReminder) return
+    if (!currentReminder) return;
     const operationData = structuredClone(formData);
-    operationData.id = currentReminderId
-    operationData.hour = `${operationData.hour}`
-    operationData.day_of_week = ListDaysOfWeek.find(d => d.label == operationData.day_of_week)?.id || null
-    changeReminderMutation.mutate(operationData)
-  }
+    operationData.id = currentReminderId;
+    operationData.hour = `${operationData.hour}`;
+    operationData.day_of_week =
+      ListDaysOfWeek.find((d) => d.label == operationData.day_of_week)?.id ||
+      null;
+    changeReminderMutation.mutate(operationData);
+  };
 
   return (
     <div className="p-4 flex flex-col justify-between h-full">

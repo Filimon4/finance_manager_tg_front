@@ -2,6 +2,7 @@ import NavigationButton from "@shared/components/Buttons/NavigationButton/Naviga
 import { MainContainer } from "@shared/components/containers/MainContainer/MainContainer";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
 import BoxInfo from "@shared/components/Info/BoxInfo/BoxInfo";
+import { DayOfWeek, ListDaysOfWeek } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@widgets/Main/Header/Header";
@@ -17,7 +18,8 @@ const Reminders = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/reminders/users_reminders`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+            tg_id:
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -52,12 +54,19 @@ const Reminders = () => {
                           }}
                         >
                           <p>
-                            {rem.hour} {rem.day_of_week}
+                            {
+                              ListDaysOfWeek.find(
+                                //@ts-ignore
+                                (t) => t.id == DayOfWeek[rem.day_of_week]
+                              )?.label
+                            }
+                            {" - "}
+                            {`${rem.hour}:00`}
                           </p>
                           <div
                             className={`
                               w-5 h-5 rounded-full cursor-pointer transition-colors duration-300
-                              ${rem.is_acitve ? "bg-green-500" : "bg-red-500"}
+                              ${rem.is_active ? "bg-green-500" : "bg-red-500"}
                             `}
                           />
                         </div>

@@ -12,13 +12,14 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const EditReminder = () => {
-  const { state } = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const config = FormsConfig[FormType.edit_reminder];
-
+  
+  const { state } = useLocation();
   const { id: currentReminderId } = state;
-
+  
+  const config = FormsConfig[FormType.edit_reminder];
+  
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {
       acc[`${item.id}`] = null;

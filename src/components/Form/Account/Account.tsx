@@ -34,7 +34,7 @@ const Account = () => {
   const createAccountMutation = useMutation({
     mutationFn: async (newCashAccount: typeof formData) => {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/create`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts`,
         newCashAccount
       );
       return response.data;

@@ -10,14 +10,12 @@ const Accounts = () => {
   const { data } = useQuery<{ data: { accounts_overview: any[] } }>({
     queryKey: ["cashAccounts"],
     queryFn: async () => {
+      const tg_id =
+        window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
       const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/overview`,
-        {
-          params: {
-            tg_id:
-              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
-          },
-        }
+        `${
+          import.meta.env.VITE_BACK_END_URL
+        }/api/cash_accounts/${tg_id}/overview`
       );
       return res;
     },
@@ -40,7 +38,9 @@ const Accounts = () => {
                   <div
                     className="flex flex-row justify-between items-center w-full h-full px-3 cursor-pointer"
                     onClick={() => {
-                      navigate(ERoutes.edit_account, { state: { id: account.id } })
+                      navigate(ERoutes.edit_account, {
+                        state: { id: account.id },
+                      });
                     }}
                   >
                     <p>{account.account_name}</p>
@@ -65,7 +65,7 @@ const Accounts = () => {
 
       <NavigationButton link={ERoutes.accounts} style="round">
         <div className="flex w-full justify-center items-center cursor-pointer">
-          <p>Добавить счет</p>
+          <p>Добавить счёт</p>
         </div>
       </NavigationButton>
     </div>

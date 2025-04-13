@@ -1,9 +1,7 @@
 import CallbackButton from "@shared/components/Buttons/CallbackButton/CallbackButton";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
-import { FormDatePicker } from "@shared/components/Form/FormDatePicker";
 import FormInput from "@shared/components/Form/FormInput";
-import FormList from "@shared/components/Form/FormList";
-import FormOperations from "@shared/components/Form/FormOperations";
+import FormOperatonCategory from "@shared/components/Form/FormOperatonCategory";
 import { FormsConfig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
@@ -35,7 +33,7 @@ const Category = () => {
   const createCategoryMutation = useMutation({
     mutationFn: async (newCategory: typeof formData) => {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/api/categories/create`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/categories`,
         newCategory
       );
       return response.data;
@@ -59,9 +57,6 @@ const Category = () => {
     },
   });
 
-  const getItemsForField = (_fieldId: string) => {
-    return [];
-  };
 
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
@@ -91,26 +86,10 @@ const Category = () => {
                     </>
                   ) : ["operation"].includes(item.inputType) ? (
                     <>
-                      <FormOperations
+                      <FormOperatonCategory
                         setValue={(v) => onFormChange(item.id, v)}
                         value={formData[`${item.id}`] || ""}
                       />
-                    </>
-                  ) : ["list"].includes(item.inputType) ? (
-                    <>
-                      <FormList
-                        setValue={(v) => {
-                          console.log(JSON.stringify(v, null, 2));
-                          onFormChange(item.id, v);
-                        }}
-                        value={formData[item.id] || ""}
-                        items={getItemsForField(item.id)}
-                        placeholder={String(item.placeholder)}
-                      />
-                    </>
-                  ) : ["date"].includes(item.inputType) ? (
-                    <>
-                      <FormDatePicker />
                     </>
                   ) : (
                     <></>

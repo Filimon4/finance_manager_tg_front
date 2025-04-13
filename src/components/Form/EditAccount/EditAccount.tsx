@@ -1,20 +1,21 @@
 import CallbackButton from "@shared/components/Buttons/CallbackButton/CallbackButton";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
-import { FormDatePicker } from "@shared/components/Form/FormDatePicker";
 import FormInput from "@shared/components/Form/FormInput";
-import FormList from "@shared/components/Form/FormList";
-import FormOperations from "@shared/components/Form/FormOperations";
 import { FormsConfig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const EditAccount = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
+  const { state } = useLocation();
+  const { id: currentCashAccountId } = state;
+
   const config = FormsConfig[FormType.edit_account];
 
   const [formData, setFormData] = useState<Record<string, any>>(
@@ -31,16 +32,18 @@ const EditAccount = () => {
     }));
   };
 
-  const createAccountMutation = useMutation({
+  const updateCashAccount = useMutation({
     mutationFn: async (newCashAccount: typeof formData) => {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/create`,
+      const response = await axios.patch(
+        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts`,
         newCashAccount
       );
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cashAccounts"] });
+      queryClient.invalidateQueries({
+        queryKey: ["cashAccounts", "currentCashAccount"],
+      });
       setFormData({
         id: null,
         cash_account_id: null,
@@ -57,39 +60,71 @@ const EditAccount = () => {
     },
   });
 
-  const { data: allCurrencies } = useQuery({
-    queryKey: ["allCurrencies"],
-    queryFn: async () => {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACK_END_URL}/api/currencies/all`
+  const deleteCashAccount = useMutation({
+    mutationFn: async (newCashAccount: typeof formData) => {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts`,
+        {data: newCashAccount}
       );
-      return res;
+      return response.data;
     },
-    staleTime: 1200000,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cashAccounts", "currentCashAccount"],
+      });
+      setFormData({
+        id: null,
+        cash_account_id: null,
+        to_cash_account_id: null,
+        category_id: null,
+        amount: null,
+        description: null,
+        type: null,
+      });
+      navigate(ERoutes.main);
+    },
+    onError: (error) => {
+      console.error("Error creating operation:", error);
+    },
   });
 
-  const handleSubmit = () => {
-    const operationData = structuredClone(formData);
-    operationData.account_id =
-      window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
+  //region Get cash account
 
-    if (operationData.currency_id) {
-      operationData.currency_id =
-        allCurrencies?.data?.all.find(
-          (t: any) => t.code === operationData.currency_id
-        ).symbol_native || null;
-    }
-    createAccountMutation.mutate(operationData);
+  const { data: currentCashAccount, isSuccess: currCashAccountIsSuccess } =
+    useQuery<{ data: { account: any } }>({
+      queryKey: ["currentCashAccount"],
+      queryFn: async () => {
+        const res = await axios.get(
+          `${
+            import.meta.env.VITE_BACK_END_URL
+          }/api/cash_accounts/${currentCashAccountId}`
+        );
+        return res;
+      },
+      refetchOnMount: true,
+    });
+
+  useEffect(() => {
+    if (!currCashAccountIsSuccess) return;
+    const cashAccount = currentCashAccount.data.account;
+    setFormData({
+      id: cashAccount.id,
+      name: cashAccount.name,
+    });
+  }, [currCashAccountIsSuccess]);
+
+  const handleUpdateSubmit = () => {
+    const operationData = structuredClone(formData);
+    operationData.id = currentCashAccountId;
+
+    updateCashAccount.mutate(operationData);
   };
 
-  const getItemsForField = (fieldId: string) => {
-    if (fieldId === "currency_id") {
-      return (
-        allCurrencies?.data?.all.map((t: any) => t?.symbol || "none") ||
-        []
-      );
-    }
-    return [];
+  const handleDeleteSubmit = () => {
+    const operationData = structuredClone(formData);
+    operationData.id = currentCashAccountId;
+
+    deleteCashAccount.mutate(operationData);
   };
 
   return (
@@ -112,28 +147,6 @@ const EditAccount = () => {
                         value={formData[`${item.id}`] || ""}
                       />
                     </>
-                  ) : ["operation"].includes(item.inputType) ? (
-                    <>
-                      <FormOperations
-                        setValue={(v) => onFormChange(item.id, v)}
-                        value={formData[`${item.id}`] || ""}
-                      />
-                    </>
-                  ) : ["list"].includes(item.inputType) ? (
-                    <>
-                      <FormList
-                        setValue={(v) => {
-                          onFormChange(item.id, v);
-                        }}
-                        value={formData[item.id] || ""}
-                        items={getItemsForField(item.id)}
-                        placeholder={String(item.placeholder)}
-                      />
-                    </>
-                  ) : ["date"].includes(item.inputType) ? (
-                    <>
-                      <FormDatePicker />
-                    </>
                   ) : (
                     <></>
                   )}
@@ -141,11 +154,18 @@ const EditAccount = () => {
               ))}
             </div>
 
-            <CallbackButton style="round" callback={handleSubmit}>
-              <div className="flex w-full justify-center items-center cursor-pointer">
-                <p>Добавить</p>
-              </div>
-            </CallbackButton>
+            <div className="flex flex-col justify-center gap-5">
+              <CallbackButton style="round" callback={handleDeleteSubmit}>
+                <div className="flex w-full justify-center items-center cursor-pointer">
+                  <p>Удалить</p>
+                </div>
+              </CallbackButton>
+              <CallbackButton style="round" callback={handleUpdateSubmit}>
+                <div className="flex w-full justify-center items-center cursor-pointer">
+                  <p>Сохранить</p>
+                </div>
+              </CallbackButton>
+            </div>
           </div>
         </WhitePanelContainer>
       </div>

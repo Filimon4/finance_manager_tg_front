@@ -1,21 +1,22 @@
 import CallbackButton from "@shared/components/Buttons/CallbackButton/CallbackButton";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
-import { FormDatePicker } from "@shared/components/Form/FormDatePicker";
 import FormInput from "@shared/components/Form/FormInput";
-import FormList from "@shared/components/Form/FormList";
-import FormOperations from "@shared/components/Form/FormOperations";
+import FormOperatonCategory from "@shared/components/Form/FormOperatonCategory";
 import { FormsConfig } from "@shared/config/formsConfig";
-import { FormType } from "@shared/types/FormTypes";
+import { FormType, TransactionType } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const EditCategory = () => {
+const Category = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const config = FormsConfig[FormType.edit_category];
+
+  const { state } = useLocation();
+  const { id: currentCategoryId } = state;
 
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {
@@ -25,32 +26,28 @@ const EditCategory = () => {
   );
 
   const onFormChange = (fieldName: string, value: any) => {
-    console.log("onFormChange: ", fieldName, value);
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,
     }));
   };
 
-  const createCategoryMutation = useMutation({
-    mutationFn: async (newCategory: typeof formData) => {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/api/categories/create`,
-        newCategory
+  const updateCashAccount = useMutation({
+    mutationFn: async (newCashAccount: typeof formData) => {
+      const response = await axios.patch(
+        `${import.meta.env.VITE_BACK_END_URL}/api/categories`,
+        newCashAccount
       );
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-
+      queryClient.invalidateQueries({
+        queryKey: ["categories", "currentCashAccount"],
+      });
       setFormData({
         id: null,
-        cash_account_id: null,
-        to_cash_account_id: null,
-        category_id: null,
-        amount: null,
-        description: null,
-        type: null,
+        base_type: null,
+        name: null,
       });
       navigate(ERoutes.main);
     },
@@ -59,14 +56,66 @@ const EditCategory = () => {
     },
   });
 
-  const getItemsForField = (_fieldId: string) => {
-    return [];
+  const deleteCashAccount = useMutation({
+    mutationFn: async (newCashAccount: typeof formData) => {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACK_END_URL}/api/categories`,
+        { data: newCashAccount }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["categories", "currentCashAccount"],
+      });
+      setFormData({
+        id: null,
+        base_type: null,
+        name: null,
+      });
+      navigate(ERoutes.main);
+    },
+    onError: (error) => {
+      console.error("Error creating operation:", error);
+    },
+  });
+
+  const { data: currentCategory, isSuccess: currCategoryIsSuccess } = useQuery<{
+    data: { category: any };
+  }>({
+    queryKey: ["currentCashAccount"],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_BACK_END_URL
+        }/api/categories/${currentCategoryId}`
+      );
+      return res;
+    },
+    refetchOnMount: true,
+  });
+
+  useEffect(() => {
+    if (!currCategoryIsSuccess) return;
+    const category = currentCategory.data.category;
+    console.log(JSON.stringify(category, null, 2));
+    setFormData({
+      id: category.id,
+      base_type: category.base_type == 'EXPENSIVE' ? TransactionType.EXPENSIVE : TransactionType.INCOME,
+      name: category.name,
+    });
+  }, [currCategoryIsSuccess]);
+
+  const handleDeleteSubmit = () => {
+    const operationData = structuredClone(formData);
+    operationData.id = currentCategoryId;
+    deleteCashAccount.mutate(operationData);
   };
 
-  const handleSubmit = () => {
+  const handleUpdateSubmit = () => {
     const operationData = structuredClone(formData);
-    operationData.account_id = window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
-    createCategoryMutation.mutate(operationData);
+    operationData.id = currentCategoryId;
+    updateCashAccount.mutate(operationData);
   };
 
   return (
@@ -91,26 +140,10 @@ const EditCategory = () => {
                     </>
                   ) : ["operation"].includes(item.inputType) ? (
                     <>
-                      <FormOperations
+                      <FormOperatonCategory
                         setValue={(v) => onFormChange(item.id, v)}
                         value={formData[`${item.id}`] || ""}
                       />
-                    </>
-                  ) : ["list"].includes(item.inputType) ? (
-                    <>
-                      <FormList
-                        setValue={(v) => {
-                          console.log(JSON.stringify(v, null, 2));
-                          onFormChange(item.id, v);
-                        }}
-                        value={formData[item.id] || ""}
-                        items={getItemsForField(item.id)}
-                        placeholder={String(item.placeholder)}
-                      />
-                    </>
-                  ) : ["date"].includes(item.inputType) ? (
-                    <>
-                      <FormDatePicker />
                     </>
                   ) : (
                     <></>
@@ -118,11 +151,18 @@ const EditCategory = () => {
                 </div>
               ))}
             </div>
-            <CallbackButton style="round" callback={handleSubmit}>
-              <div className="flex w-full justify-center items-center cursor-pointer">
-                <p>Добавить</p>
-              </div>
-            </CallbackButton>
+            <div className="flex flex-col justify-center gap-5">
+              <CallbackButton style="round" callback={handleDeleteSubmit}>
+                <div className="flex w-full justify-center items-center cursor-pointer">
+                  <p>Удалить</p>
+                </div>
+              </CallbackButton>
+              <CallbackButton style="round" callback={handleUpdateSubmit}>
+                <div className="flex w-full justify-center items-center cursor-pointer">
+                  <p>Сохранить</p>
+                </div>
+              </CallbackButton>
+            </div>
           </div>
         </WhitePanelContainer>
       </div>
@@ -130,4 +170,4 @@ const EditCategory = () => {
   );
 };
 
-export default EditCategory;
+export default Category;

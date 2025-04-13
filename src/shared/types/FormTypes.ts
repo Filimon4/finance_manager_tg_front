@@ -1,6 +1,8 @@
 export enum FormType {
   category,
+  edit_category,
   account,
+  edit_account,
   operations,
   reminder,
   edit_reminder

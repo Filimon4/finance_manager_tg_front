@@ -39,6 +39,14 @@ function App() {
         path={ERoutes.edit_reminder}
         element={<Form type={FormType.edit_reminder} />}
       />
+      <Route
+        path={ERoutes.edit_account}
+        element={<Form type={FormType.edit_account} />}
+      />
+      <Route
+        path={ERoutes.edit_category}
+        element={<Form type={FormType.edit_category} />}
+      />
       <Route path={ERoutes.notFound} element={<NotFound />} />
     </Routes>
   );

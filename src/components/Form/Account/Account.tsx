@@ -7,12 +7,13 @@ import FormOperations from "@shared/components/Form/FormOperations";
 import { FormsConfig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Account = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const config = FormsConfig[FormType.account];
 
@@ -33,12 +34,13 @@ const Account = () => {
   const createAccountMutation = useMutation({
     mutationFn: async (newCashAccount: typeof formData) => {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/create`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts`,
         newCashAccount
       );
       return response.data;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cashAccounts"] });
       setFormData({
         id: null,
         cash_account_id: null,
@@ -63,17 +65,19 @@ const Account = () => {
       );
       return res;
     },
-    staleTime: 1200000,
+    refetchOnMount: true,
   });
 
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
-    operationData.account_id = window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
+    console.log("operationData: ", operationData);
+    operationData.account_id =
+      window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
 
     if (operationData.currency_id) {
       operationData.currency_id =
         allCurrencies?.data?.all.find(
-          (t: any) => t.code === operationData.currency_id
+          (t: any) => t.symbol === operationData.currency_id
         ).id || null;
     }
     createAccountMutation.mutate(operationData);
@@ -81,7 +85,9 @@ const Account = () => {
 
   const getItemsForField = (fieldId: string) => {
     if (fieldId === "currency_id") {
-      return allCurrencies?.data?.all.map((t: any) => t?.code || "none") || [];
+      return (
+        allCurrencies?.data?.all.map((t: any) => t?.symbol || "none") || []
+      );
     }
     return [];
   };
@@ -117,7 +123,6 @@ const Account = () => {
                     <>
                       <FormList
                         setValue={(v) => {
-                          console.log(JSON.stringify(v, null, 2));
                           onFormChange(item.id, v);
                         }}
                         value={formData[item.id] || ""}

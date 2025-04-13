@@ -11,7 +11,8 @@ const History = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/operations`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+            tg_id:
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -28,16 +29,14 @@ const History = () => {
         data.data.operations.map((oper, i) => {
           const isIncome = oper.type === "INCOME";
           const amountPrefix = isIncome ? "+" : "-";
-          const operationDate = moment(oper.created_at).format(
-            "DD.MM.YY hh:mm"
-          );
+          const operationDate = moment(oper.created_at).format("DD.MM.YY");
 
           return (
             <BoxInfo style={"squre"} key={i}>
               <div className="flex flex-row justify-between items-center w-full h-full px-3">
                 <p className="flex flex-col gap-0">
                   {oper.name || "Название отсутствует"}
-                  <span className="text-sm text-gray-500">{operationDate}</span>
+                  <span className="text-sm text-gray-500">Дата: {operationDate}</span>
                 </p>
                 <p
                   className={`text-2xl ${

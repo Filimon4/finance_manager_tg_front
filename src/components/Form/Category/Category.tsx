@@ -1,18 +1,17 @@
 import CallbackButton from "@shared/components/Buttons/CallbackButton/CallbackButton";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
-import { FormDatePicker } from "@shared/components/Form/FormDatePicker";
 import FormInput from "@shared/components/Form/FormInput";
-import FormList from "@shared/components/Form/FormList";
-import FormOperations from "@shared/components/Form/FormOperations";
+import FormOperatonCategory from "@shared/components/Form/FormOperatonCategory";
 import { FormsConfig } from "@shared/config/formsConfig";
 import { FormType } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Category = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const config = FormsConfig[FormType.category];
 
@@ -24,7 +23,6 @@ const Category = () => {
   );
 
   const onFormChange = (fieldName: string, value: any) => {
-    console.log("onFormChange: ", fieldName, value);
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,
@@ -34,12 +32,13 @@ const Category = () => {
   const createCategoryMutation = useMutation({
     mutationFn: async (newCategory: typeof formData) => {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACK_END_URL}/api/categories/create`,
+        `${import.meta.env.VITE_BACK_END_URL}/api/categories`,
         newCategory
       );
       return response.data;
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
       setFormData({
         id: null,
         cash_account_id: null,
@@ -56,9 +55,6 @@ const Category = () => {
     },
   });
 
-  const getItemsForField = (_fieldId: string) => {
-    return [];
-  };
 
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
@@ -88,26 +84,10 @@ const Category = () => {
                     </>
                   ) : ["operation"].includes(item.inputType) ? (
                     <>
-                      <FormOperations
+                      <FormOperatonCategory
                         setValue={(v) => onFormChange(item.id, v)}
                         value={formData[`${item.id}`] || ""}
                       />
-                    </>
-                  ) : ["list"].includes(item.inputType) ? (
-                    <>
-                      <FormList
-                        setValue={(v) => {
-                          console.log(JSON.stringify(v, null, 2));
-                          onFormChange(item.id, v);
-                        }}
-                        value={formData[item.id] || ""}
-                        items={getItemsForField(item.id)}
-                        placeholder={String(item.placeholder)}
-                      />
-                    </>
-                  ) : ["date"].includes(item.inputType) ? (
-                    <>
-                      <FormDatePicker />
                     </>
                   ) : (
                     <></>

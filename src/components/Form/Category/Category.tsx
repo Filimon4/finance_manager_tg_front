@@ -23,7 +23,6 @@ const Category = () => {
   );
 
   const onFormChange = (fieldName: string, value: any) => {
-    console.log("onFormChange: ", fieldName, value);
     setFormData((prev) => ({
       ...prev,
       [fieldName]: value,
@@ -40,7 +39,6 @@ const Category = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
-
       setFormData({
         id: null,
         cash_account_id: null,

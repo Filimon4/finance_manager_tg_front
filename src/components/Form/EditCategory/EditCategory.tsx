@@ -42,7 +42,7 @@ const Category = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["categories", "currentCashAccount"],
+        queryKey: ["categories"],
       });
       setFormData({
         id: null,
@@ -66,7 +66,7 @@ const Category = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["categories", "currentCashAccount"],
+        queryKey: ["categories"],
       });
       setFormData({
         id: null,
@@ -83,7 +83,7 @@ const Category = () => {
   const { data: currentCategory, isSuccess: currCategoryIsSuccess } = useQuery<{
     data: { category: any };
   }>({
-    queryKey: ["currentCashAccount"],
+    queryKey: ["currentCategory", `${currentCategoryId}`],
     queryFn: async () => {
       const res = await axios.get(
         `${
@@ -96,13 +96,21 @@ const Category = () => {
   });
 
   useEffect(() => {
-    if (!currCategoryIsSuccess) return;
+    if (
+      !currCategoryIsSuccess ||
+      !currentCategory ||
+      !("data" in currentCategory) ||
+      !("category" in currentCategory.data)
+    )
+      return;
     const category = currentCategory.data.category;
-    console.log(JSON.stringify(category, null, 2));
     setFormData({
-      id: category.id,
-      base_type: category.base_type == 'EXPENSIVE' ? TransactionType.EXPENSIVE : TransactionType.INCOME,
-      name: category.name,
+      id: category?.id,
+      base_type:
+        category.base_type == "EXPENSIVE"
+          ? TransactionType.EXPENSIVE
+          : TransactionType.INCOME,
+      name: category?.name,
     });
   }, [currCategoryIsSuccess]);
 

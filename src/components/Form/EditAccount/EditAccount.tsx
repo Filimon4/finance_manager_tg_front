@@ -64,7 +64,7 @@ const EditAccount = () => {
     mutationFn: async (newCashAccount: typeof formData) => {
       const response = await axios.delete(
         `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts`,
-        {data: newCashAccount}
+        { data: newCashAccount }
       );
       return response.data;
     },
@@ -92,7 +92,7 @@ const EditAccount = () => {
 
   const { data: currentCashAccount, isSuccess: currCashAccountIsSuccess } =
     useQuery<{ data: { account: any } }>({
-      queryKey: ["currentCashAccount"],
+      queryKey: ["currentCashAccount", `${currentCashAccountId}`],
       queryFn: async () => {
         const res = await axios.get(
           `${
@@ -105,11 +105,17 @@ const EditAccount = () => {
     });
 
   useEffect(() => {
-    if (!currCashAccountIsSuccess) return;
+    if (
+      !currCashAccountIsSuccess ||
+      !currentCashAccount ||
+      !("data" in currentCashAccount) ||
+      !("account" in currentCashAccount.data)
+    )
+      return;
     const cashAccount = currentCashAccount.data.account;
     setFormData({
-      id: cashAccount.id,
-      name: cashAccount.name,
+      id: cashAccount?.id,
+      name: cashAccount?.name,
     });
   }, [currCashAccountIsSuccess]);
 

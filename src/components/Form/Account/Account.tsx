@@ -65,19 +65,20 @@ const Account = () => {
       );
       return res;
     },
-    staleTime: 1200000,
+    refetchOnMount: true,
   });
 
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
+    console.log("operationData: ", operationData);
     operationData.account_id =
       window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
 
     if (operationData.currency_id) {
       operationData.currency_id =
         allCurrencies?.data?.all.find(
-          (t: any) => t.code === operationData.currency_id
-        ).symbol_native || null;
+          (t: any) => t.symbol === operationData.currency_id
+        ).id || null;
     }
     createAccountMutation.mutate(operationData);
   };
@@ -85,8 +86,7 @@ const Account = () => {
   const getItemsForField = (fieldId: string) => {
     if (fieldId === "currency_id") {
       return (
-        allCurrencies?.data?.all.map((t: any) => t?.symbol || "none") ||
-        []
+        allCurrencies?.data?.all.map((t: any) => t?.symbol || "none") || []
       );
     }
     return [];

@@ -1,9 +1,9 @@
 import CallbackButton from "@shared/components/Buttons/CallbackButton/CallbackButton";
 import WhitePanelContainer from "@shared/components/containers/WhitePanelContainer/WhitePanelContainer";
 import { FormDatePicker } from "@shared/components/Form/FormDatePicker";
-import FormInput from "@shared/components/Form/FormInput";
 import FormList from "@shared/components/Form/FormList";
 import FormOperations from "@shared/components/Form/FormOperations";
+import PositiveFormInput from "@shared/components/Form/PositiveFormInput";
 import { FormsConfig } from "@shared/config/formsConfig";
 import { FormType, TransactionType } from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
@@ -25,8 +25,7 @@ const Operation = () => {
   );
 
   const onFormChange = (fieldName: string, value: any) => {
-    console.log("onFormChange: ", fieldName, value);
-    if (fieldName == 'type') {
+    if (fieldName == "type") {
       setFormData((prev) => ({
         ...prev,
         category_id: null,
@@ -50,7 +49,8 @@ const Operation = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["balance", "operations"] });
+      queryClient.refetchQueries({ queryKey: ["operations"] });
+      queryClient.refetchQueries({ queryKey: ["balance"] });
       setFormData({
         id: null,
         cash_account_id: null,
@@ -74,7 +74,8 @@ const Operation = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/categories/all`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+            tg_id:
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -90,7 +91,8 @@ const Operation = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/all`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+            tg_id:
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -114,7 +116,7 @@ const Operation = () => {
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
     if (isNaN(operationData.amount)) return;
-    operationData.amount = Number(operationData.amount)
+    operationData.amount = Number(operationData.amount);
     operationData.date = operationData.date
       ? operationData.date
       : new Date().toJSON();
@@ -139,7 +141,8 @@ const Operation = () => {
         ).id || null;
     }
 
-    operationData.account_id = window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
+    operationData.account_id =
+      window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
 
     createOperationMutation.mutate(operationData);
   };
@@ -185,10 +188,9 @@ const Operation = () => {
                 <div key={index} className="mb-4">
                   {["number", "text"].includes(item.inputType) ? (
                     <>
-                      <FormInput
+                      <PositiveFormInput
                         placeholder={item.placeholder ?? ""}
                         setValue={(v) => onFormChange(item.id, v)}
-                        type={item.inputType}
                         value={formData[`${item.id}`] || ""}
                       />
                     </>

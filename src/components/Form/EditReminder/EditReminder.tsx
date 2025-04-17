@@ -14,12 +14,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 const EditReminder = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   const { state } = useLocation();
   const { id: currentReminderId } = state;
-  
+
   const config = FormsConfig[FormType.edit_reminder];
-  
+
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {
       acc[`${item.id}`] = null;
@@ -36,7 +36,6 @@ const EditReminder = () => {
 
   const deleteReminderMutation = useMutation({
     mutationFn: async (reminder: typeof formData) => {
-      console.log(JSON.stringify(reminder, null, 2));
       const response = await axios.delete(
         `${import.meta.env.VITE_BACK_END_URL}/api/reminders`,
         {
@@ -49,7 +48,7 @@ const EditReminder = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["reminders"] });
+      queryClient.refetchQueries({ queryKey: ["reminders"] });
       setFormData({
         id: null,
         day_of_week: null,
@@ -72,7 +71,7 @@ const EditReminder = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["reminders"] });
+      queryClient.refetchQueries({ queryKey: ["reminders"] });
       setFormData({
         account_id: null,
         day_of_week: null,
@@ -86,22 +85,25 @@ const EditReminder = () => {
     },
   });
 
-  const { data: currentReminder, isSuccess: currReminderIsSuccess } =
-    useQuery<any>({
-      queryKey: ["currentReminder"],
-      queryFn: async () => {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACK_END_URL}/api/reminders/one`,
-          {
-            params: {
-              id: currentReminderId,
-            },
-          }
-        );
-        return res;
-      },
-    });
-
+  const {
+    data: currentReminder,
+    isSuccess: currReminderIsSuccess,
+    refetch: refetchCurrentReminder,
+  } = useQuery<any>({
+    queryKey: ["currentReminder"],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACK_END_URL}/api/reminders/one`,
+        {
+          params: {
+            id: currentReminderId,
+          },
+        }
+      );
+      return res;
+    },
+    enabled: false,
+  });
   useEffect(() => {
     if (!currReminderIsSuccess) return;
     const reminder = currentReminder.data.reminder;
@@ -113,7 +115,18 @@ const EditReminder = () => {
       hour: +reminder.hour,
       is_active: reminder.is_active,
     });
-  }, [currReminderIsSuccess]);
+  }, [currReminderIsSuccess, currentReminderId]);
+
+  useEffect(() => {
+    setFormData({
+      id: null,
+      day_of_week: null,
+      hour: null,
+      is_active: null,
+    });
+    queryClient.resetQueries({queryKey: ["currentReminder"]});
+    refetchCurrentReminder();
+  }, [currentReminderId]);
 
   const getItemsForField = (fieldId: string) => {
     if (fieldId == "day_of_week") {

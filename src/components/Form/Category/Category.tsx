@@ -38,7 +38,7 @@ const Category = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      queryClient.refetchQueries({ queryKey: ["categories"] });
       setFormData({
         id: null,
         cash_account_id: null,
@@ -55,10 +55,10 @@ const Category = () => {
     },
   });
 
-
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
-    operationData.account_id = window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
+    operationData.account_id =
+      window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
     createCategoryMutation.mutate(operationData);
   };
 

@@ -39,7 +39,7 @@ const Reminder = () => {
       return response.data;
     },
     onSuccess: (_data: any) => {
-      queryClient.invalidateQueries({ queryKey: ["reminders"] });
+      queryClient.refetchQueries({ queryKey: ["reminders"] });
       setFormData({
         account_id: null,
         day_of_week: null,

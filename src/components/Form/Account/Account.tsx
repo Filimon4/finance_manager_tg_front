@@ -40,7 +40,7 @@ const Account = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cashAccounts"] });
+      queryClient.resetQueries({ queryKey: ["cashAccounts"] });
       setFormData({
         id: null,
         cash_account_id: null,
@@ -70,7 +70,6 @@ const Account = () => {
 
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
-    console.log("operationData: ", operationData);
     operationData.account_id =
       window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
 

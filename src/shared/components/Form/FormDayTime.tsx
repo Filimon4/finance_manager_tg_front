@@ -10,21 +10,23 @@ interface FormDayTimeProps {
   setValue: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const FormDayTime: FC<FormDayTimeProps> = ({setValue, title, value}) => {
+export const FormDayTime: FC<FormDayTimeProps> = ({
+  setValue,
+  title,
+  value,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const modalRef = useClickOutside({ 
-    onClick: () => setIsOpen(false) 
+  const modalRef = useClickOutside({
+    onClick: () => setIsOpen(false),
   });
 
-  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const hours = Array.from({ length: 24 }, (_, i) => i + 1);
 
   return (
     <>
       <BoxInfo style="squre">
         <div className="w-full h-full flex justify-between items-center px-4">
-          <span>
-            {value ? `${value}:00` : "Время не выбрано"}
-          </span>
+          <span>{value ? `${value}:00` : "Время не выбрано"}</span>
           <button
             onClick={() => setIsOpen(true)}
             className="text-gray-500 hover:text-blue-500 transition-colors"

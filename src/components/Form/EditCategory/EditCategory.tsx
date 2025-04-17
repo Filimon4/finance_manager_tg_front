@@ -41,7 +41,7 @@ const Category = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: ["categories"],
       });
       setFormData({
@@ -65,7 +65,7 @@ const Category = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      queryClient.refetchQueries({
         queryKey: ["categories"],
       });
       setFormData({

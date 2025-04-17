@@ -41,8 +41,11 @@ const EditAccount = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["cashAccounts", "currentCashAccount"],
+      queryClient.resetQueries({
+        queryKey: ["currentCashAccount"],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["cashAccounts"],
       });
       setFormData({
         id: null,
@@ -69,8 +72,11 @@ const EditAccount = () => {
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["cashAccounts", "currentCashAccount"],
+      queryClient.resetQueries({
+        queryKey: ["currentCashAccount"],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["cashAccounts"],
       });
       setFormData({
         id: null,

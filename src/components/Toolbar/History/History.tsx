@@ -35,8 +35,12 @@ const History = () => {
             <BoxInfo style={"squre"} key={i}>
               <div className="flex flex-row justify-between items-center w-full h-full px-3">
                 <p className="flex flex-col gap-0">
-                  {oper.name || "Название отсутствует"}
-                  <span className="text-sm text-gray-500">Дата: {operationDate}</span>
+                  {(oper.name?.length > 20
+                    ? oper.name.slice(0, 20) + "..."
+                    : oper.name) || "Название отсутствует"}
+                  <span className="text-sm text-gray-500">
+                    Дата: {operationDate}
+                  </span>
                 </p>
                 <p
                   className={`text-2xl ${

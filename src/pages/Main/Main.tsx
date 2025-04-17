@@ -11,7 +11,7 @@ const Main = () => {
         <div className={`flex flex-col w-full h-full text-white`}>
           <Header />
           <div className="flex flex-col justify-between h-full">
-            <div className="h-max flex-6">
+            <div className="h-max flex-6 min-h-[150px]">
               <Balance />
             </div>
             <div className="h-max flex-1/2 p-2">

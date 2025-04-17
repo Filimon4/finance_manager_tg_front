@@ -7,6 +7,7 @@ import { ERoutes } from "@shared/types/Routes";
 import { useQuery } from "@tanstack/react-query";
 import Header from "@widgets/Main/Header/Header";
 import axios from "axios";
+import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
 const Reminders = () => {
@@ -27,6 +28,8 @@ const Reminders = () => {
     },
     staleTime: 30000,
   });
+
+  console.log(JSON.stringify(allReminders, null, 2));
 
   return (
     <MainContainer>
@@ -53,16 +56,24 @@ const Reminders = () => {
                             });
                           }}
                         >
-                          <p>
-                            {
-                              ListDaysOfWeek.find(
-                                //@ts-ignore
-                                (t) => t.id == DayOfWeek[rem.day_of_week]
-                              )?.label
-                            }
-                            {" - "}
-                            {`${rem.hour}:00`}
-                          </p>
+                          <div className="flex flex-col">
+                            <p>
+                              {
+                                ListDaysOfWeek.find(
+                                  //@ts-ignore
+                                  (t) => t.id == DayOfWeek[rem.day_of_week]
+                                )?.label
+                              }
+                              {" - "}
+                              {`${rem.hour}:00`}
+                            </p>
+                            <p className="text-sm text-gray-400">
+                              {"Сработает: "}
+                              {moment(new Date(rem.next_time)).format(
+                                "DD-MM-YY HH:mm"
+                              )}
+                            </p>
+                          </div>
                           <div
                             className={`
                               w-5 h-5 rounded-full cursor-pointer transition-colors duration-300
@@ -74,7 +85,9 @@ const Reminders = () => {
                     ))
                   ) : (
                     <>
-                      <p className="flex w-full justify-center">Нет операций</p>
+                      <p className="flex w-full justify-center">
+                        Нет напоминаний
+                      </p>
                     </>
                   )}
                 </div>

@@ -47,6 +47,10 @@ function App() {
         path={ERoutes.edit_category}
         element={<Form type={FormType.edit_category} />}
       />
+      <Route
+        path={ERoutes.edit_operation}
+        element={<Form type={FormType.edit_operation} />}
+      />
       <Route path={ERoutes.notFound} element={<NotFound />} />
     </Routes>
   );

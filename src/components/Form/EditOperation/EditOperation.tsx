@@ -6,17 +6,24 @@ import FormList from "@shared/components/Form/FormList";
 import FormOperations from "@shared/components/Form/FormOperations";
 import PositiveFormInput from "@shared/components/Form/PositiveFormInput";
 import { FormsConfig } from "@shared/config/formsConfig";
-import { FormType, TransactionType } from "@shared/types/FormTypes";
+import {
+  FormType,
+  OperationType,
+  TransactionType,
+} from "@shared/types/FormTypes";
 import { ERoutes } from "@shared/types/Routes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const Operation = () => {
-  const navigate = useNavigate();
+const EditOperation = () => {
   const queryClient = useQueryClient();
-  const config = FormsConfig[FormType.operations];
+  const navigate = useNavigate();
+  const config = FormsConfig[FormType.edit_operation];
+
+  const { state } = useLocation();
+  const { id: currentOperationId } = state;
 
   const [formData, setFormData] = useState<Record<string, any>>(
     config.items.reduce((acc, item) => {
@@ -26,42 +33,36 @@ const Operation = () => {
   );
 
   const onFormChange = (fieldName: string, value: any) => {
-    if (fieldName == "type") {
-      setFormData((prev) => ({
-        ...prev,
-        category_id: null,
-        to_cash_account_id: null,
-        [fieldName]: value,
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [fieldName]: value,
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
   };
 
-  const createOperationMutation = useMutation({
+  const updateOperation = useMutation({
     mutationFn: async (newOperation: typeof formData) => {
-      const response = await axios.post(
+      const response = await axios.patch(
         `${import.meta.env.VITE_BACK_END_URL}/api/operations`,
         newOperation
       );
       return response.data;
     },
     onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ["operations"] });
-      queryClient.refetchQueries({ queryKey: ["balance"] });
+      queryClient.refetchQueries({
+        queryKey: ["operations"],
+      });
       queryClient.refetchQueries({ queryKey: ["categories"] });
       queryClient.refetchQueries({ queryKey: ["cashAccounts"] });
       setFormData({
         id: null,
+        name: null,
+        amount: null,
+        description: null,
+        date: null,
+        type: null,
         cash_account_id: null,
         to_cash_account_id: null,
         category_id: null,
-        amount: null,
-        description: null,
-        type: null,
       });
       navigate(ERoutes.main);
     },
@@ -69,6 +70,119 @@ const Operation = () => {
       console.error("Error creating operation:", error);
     },
   });
+
+  const deleteOperations = useMutation({
+    mutationFn: async (operation: typeof formData) => {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACK_END_URL}/api/operations`,
+        {
+          method: "delete",
+          params: {
+            id: operation.id,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries({
+        queryKey: ["operations"],
+      });
+      queryClient.refetchQueries({ queryKey: ["categories"] });
+      queryClient.refetchQueries({ queryKey: ["cashAccounts"] });
+      setFormData({
+        id: null,
+        name: null,
+        amount: null,
+        description: null,
+        date: null,
+        type: null,
+        cash_account_id: null,
+        to_cash_account_id: null,
+        category_id: null,
+      });
+      navigate(ERoutes.main);
+    },
+    onError: (error) => {
+      console.error("Error creating operation:", error);
+    },
+  });
+
+  const {
+    data: currentOperation,
+    isSuccess: currCategoryIsSuccess,
+    refetch: refetchCurrentOperation,
+  } = useQuery<{
+    data: { operation: any };
+  }>({
+    queryKey: ["currentOperations"],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_BACK_END_URL
+        }/api/operations/${currentOperationId}`
+      );
+      return res;
+    },
+    enabled: false
+  });
+
+  useEffect(() => {
+    if (
+      !currCategoryIsSuccess ||
+      !currentOperation ||
+      !("data" in currentOperation) ||
+      !("operation" in currentOperation.data)
+    )
+      return;
+    const operation = currentOperation.data.operation;
+    console.log(JSON.stringify(operation, null, 2));
+    setFormData({
+      id: operation?.id,
+      name: operation?.name,
+      amount: operation?.amount,
+      description: operation?.description,
+      date: new Date(operation?.created_at),
+      type:
+        operation.type === "INCOME"
+          ? OperationType.INCOME
+          : operation.type === "EXPENSIVE"
+          ? OperationType.EXPENSIVE
+          : OperationType.TRANSFER,
+      cash_account_id: operation.cash_account_id,
+      to_cash_account_id: operation.to_cash_account_id,
+      category_id: operation.category_id,
+    });
+  }, [currCategoryIsSuccess]);
+
+  useEffect(() => {
+    setFormData({
+      id: null,
+      name: null,
+      amount: null,
+      description: null,
+      date: null,
+      type: null,
+      cash_account_id: null,
+      to_cash_account_id: null,
+      category_id: null,
+    });
+    queryClient.resetQueries({ queryKey: ["currentOperations"] });
+    refetchCurrentOperation();
+  }, [currentOperationId]);
+
+  const handleDeleteSubmit = () => {
+    const operationData = structuredClone(formData);
+    operationData.id = currentOperationId;
+    deleteOperations.mutate(operationData);
+  };
+
+  const handleUpdateSubmit = () => {
+    const operationData = structuredClone(formData);
+    if (isNaN(operationData.amount)) return;
+    operationData.id = currentOperationId;
+    updateOperation.mutate(operationData);
+  };
 
   const { data: allCategories } = useQuery({
     queryKey: ["allCategories"],
@@ -108,7 +222,7 @@ const Operation = () => {
     if (fieldId === "cash_account_id" || fieldId === "to_cash_account_id") {
       return (
         allCashAccounts?.data?.all.map((t: any) => ({
-          id: t.id,
+          id: t?.id,
           name: t?.name,
         })) || []
       );
@@ -116,26 +230,12 @@ const Operation = () => {
     if (fieldId === "category_id") {
       return (
         allCategories?.data?.all.map((t: any) => ({
-          id: t.id,
-          name: t.name,
+          id: t?.id,
+          name: t?.name,
         })) || []
       );
     }
     return [];
-  };
-
-  const handleSubmit = () => {
-    const operationData = structuredClone(formData);
-    if (isNaN(operationData.amount)) return;
-    operationData.amount = Number(operationData.amount);
-    operationData.date = operationData.date
-      ? operationData.date
-      : new Date().toJSON();
-
-    operationData.account_id =
-      window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
-
-    createOperationMutation.mutate(operationData);
   };
 
   const getVisibleFields = () => {
@@ -199,7 +299,14 @@ const Operation = () => {
                   ) : ["operation"].includes(item.inputType) ? (
                     <>
                       <FormOperations
-                        setValue={(v) => onFormChange(item.id, v)}
+                        setValue={(v) => {
+                          setFormData({
+                            ...formData,
+                            to_cash_account_id: null,
+                            category_id: null,
+                          });
+                          onFormChange(item.id, v);
+                        }}
                         value={formData[`${item.id}`] || ""}
                       />
                     </>
@@ -227,19 +334,18 @@ const Operation = () => {
                 </div>
               ))}
             </div>
-            <CallbackButton
-              style="round"
-              callback={handleSubmit}
-              disabled={createOperationMutation.isPending}
-            >
-              <div className="flex w-full justify-center items-center cursor-pointer">
-                <p>
-                  {createOperationMutation.isPending
-                    ? "Добавление..."
-                    : "Добавить"}
-                </p>
-              </div>
-            </CallbackButton>
+            <div className="flex flex-col justify-center gap-5">
+              <CallbackButton style="round" callback={handleDeleteSubmit}>
+                <div className="flex w-full justify-center items-center cursor-pointer">
+                  <p>Удалить</p>
+                </div>
+              </CallbackButton>
+              <CallbackButton style="round" callback={handleUpdateSubmit}>
+                <div className="flex w-full justify-center items-center cursor-pointer">
+                  <p>Сохранить</p>
+                </div>
+              </CallbackButton>
+            </div>
           </div>
         </WhitePanelContainer>
       </div>
@@ -247,4 +353,4 @@ const Operation = () => {
   );
 };
 
-export default Operation;
+export default EditOperation;

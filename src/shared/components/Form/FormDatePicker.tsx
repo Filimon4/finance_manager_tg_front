@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { ru } from "date-fns/locale";
 import { FaCalendarAlt } from "react-icons/fa";
@@ -6,8 +6,15 @@ import BoxInfo from "../Info/BoxInfo/BoxInfo";
 import { ModalContainer } from "../containers/ModalContainer/ModalContainer";
 import useClickOutside from "@shared/hooks/useClickOutside";
 
-export const FormDatePicker = () => {
-  const [selected, setSelected] = useState<Date>();
+interface FormDatePickerProps {
+  value: Date;
+  setValue: React.Dispatch<React.SetStateAction<Date>>;
+}
+
+export const FormDatePicker: FC<FormDatePickerProps> = ({
+  setValue,
+  value,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useClickOutside({
     onClick: () => {
@@ -17,17 +24,17 @@ export const FormDatePicker = () => {
 
   const handleSelectToday = () => {
     const today = new Date();
-    setSelected(today);
+    setValue(today);
     setIsOpen(false);
   };
+
+  console.log(JSON.stringify(value, null, 2));
 
   return (
     <>
       <BoxInfo style="squre">
         <div className="w-full h-full flex justify-between items-center px-4">
-          <span>
-            {selected ? selected.toLocaleDateString() : "Дата не выбрана"}
-          </span>
+          <span>{value ? value.toLocaleDateString() : "Дата не выбрана"}</span>
           <button
             onClick={() => setIsOpen(true)}
             className="text-gray-500 hover:text-blue-500 transition-colors"
@@ -46,9 +53,10 @@ export const FormDatePicker = () => {
           <DayPicker
             locale={ru}
             mode="single"
-            selected={selected}
+            selected={value}
             onSelect={(date) => {
-              setSelected(date);
+              if (!(date instanceof Date)) return;
+              setValue(date);
               setIsOpen(false);
             }}
             className="border-0"

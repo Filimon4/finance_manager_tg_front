@@ -72,20 +72,16 @@ const Account = () => {
     const operationData = structuredClone(formData);
     operationData.account_id =
       window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
-
-    if (operationData.currency_id) {
-      operationData.currency_id =
-        allCurrencies?.data?.all.find(
-          (t: any) => t.symbol === operationData.currency_id
-        ).id || null;
-    }
     createAccountMutation.mutate(operationData);
   };
 
   const getItemsForField = (fieldId: string) => {
     if (fieldId === "currency_id") {
       return (
-        allCurrencies?.data?.all.map((t: any) => t?.symbol || "none") || []
+        allCurrencies?.data?.all.map((t: any) => ({
+          id: t.id,
+          name: t.symbol,
+        })) || []
       );
     }
     return [];
@@ -131,7 +127,12 @@ const Account = () => {
                     </>
                   ) : ["date"].includes(item.inputType) ? (
                     <>
-                      <FormDatePicker />
+                      <FormDatePicker
+                        setValue={(v) => {
+                          onFormChange(item.id, v);
+                        }}
+                        value={formData[item.id] || null}
+                      />
                     </>
                   ) : (
                     <></>

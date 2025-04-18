@@ -55,7 +55,7 @@ const Reminder = () => {
 
   const getItemsForField = (fieldId: string) => {
     if (fieldId == "day_of_week") {
-      return ListDaysOfWeek.map((t) => t.label);
+      return ListDaysOfWeek.map((t) => ({id: t.label, name: t.label}));
     }
     return [];
   };
@@ -71,7 +71,7 @@ const Reminder = () => {
 
     if (!operationData.day_of_week || !operationData.hour) return;
 
-    operationData.hour = `${operationData.hour}`;
+    operationData.hour = Number(`${operationData.hour}`);
     createReminderMutation.mutate(operationData);
   };
 

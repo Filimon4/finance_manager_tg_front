@@ -60,6 +60,35 @@ export const FormsConfig: FromConfig = {
       { id: "date", inputType: "date" },
     ],
   },
+  [FormType.edit_operation]: {
+    title: "Изменить операцию",
+    items: [
+      { id: "type", inputType: "operation" },
+      { id: "id", inputType: "none" },
+      { id: "name", inputType: "text", placeholder: "Название" },
+      { id: "amount", inputType: "number", placeholder: "Сумма" },
+      { id: "description", inputType: "text", placeholder: "Примечание" },
+      {
+        id: "cash_account_id",
+        inputType: "list",
+        placeholder: "Счет",
+        listItems: [],
+      },
+      {
+        id: "to_cash_account_id",
+        inputType: "list",
+        placeholder: "Счет",
+        listItems: [],
+      },
+      {
+        id: "category_id",
+        inputType: "list",
+        placeholder: "Категории",
+        listItems: [],
+      },
+      { id: "date", inputType: "date" },
+    ],
+  },
   [FormType.reminder]: {
     title: "Новое напоминание",
     items: [

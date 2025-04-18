@@ -6,21 +6,27 @@ import {
 } from "react-icons/md";
 
 interface FormListProps {
-  items: string[];
+  items: { id: number | string; name: string }[];
   placeholder: string;
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  value: number | string;
+  setValue: React.Dispatch<React.SetStateAction<number | string>>;
 }
 
-const FormList: FC<FormListProps> = ({ items, placeholder, value, setValue }) => {
+const FormList: FC<FormListProps> = ({
+  items,
+  placeholder,
+  value,
+  setValue,
+}) => {
   const [opened, setOpened] = useState<boolean>(false);
+  const selectedValues = items.find((i) => i.id == value);
 
   return (
     <div className="relative">
       <BoxInfo style="squre">
         <div className="flex justify-between px-2 items-center h-full">
           <div className="select-none">
-            {!value ? placeholder : value} 
+            {!selectedValues ? placeholder : selectedValues.name}
           </div>
           <div
             className="h-full w-[40px] flex justify-center items-center cursor-pointer"
@@ -48,11 +54,11 @@ const FormList: FC<FormListProps> = ({ items, placeholder, value, setValue }) =>
                   index !== items.length - 1 ? "border-b border-gray-100" : ""
                 }`}
                 onClick={() => {
-                  setValue(item)
+                  setValue(item.id);
                   setOpened(false);
                 }}
               >
-                {item}
+                {item.name}
               </li>
             ))}
           </ul>

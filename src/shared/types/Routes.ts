@@ -10,6 +10,7 @@ export enum ERoutes {
   edit_reminder = "/edit_reminder",
   edit_account = "/edit_account",
   edit_category = "/edit_category",
+  edit_operation = "/edit_operation",
 
   notFound = "*",
 }

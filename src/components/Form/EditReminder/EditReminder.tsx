@@ -124,13 +124,13 @@ const EditReminder = () => {
       hour: null,
       is_active: null,
     });
-    queryClient.resetQueries({queryKey: ["currentReminder"]});
+    queryClient.resetQueries({ queryKey: ["currentReminder"] });
     refetchCurrentReminder();
   }, [currentReminderId]);
 
   const getItemsForField = (fieldId: string) => {
     if (fieldId == "day_of_week") {
-      return ListDaysOfWeek.map((t) => t.label);
+      return ListDaysOfWeek.map((t) => ({ id: t.label, name: t.label }));
     }
     return [];
   };
@@ -143,7 +143,7 @@ const EditReminder = () => {
     if (!currentReminder) return;
     const operationData = structuredClone(formData);
     operationData.id = currentReminderId;
-    operationData.hour = `${operationData.hour}`;
+    operationData.hour = Number(`${operationData.hour}`);
     operationData.day_of_week =
       ListDaysOfWeek.find((d) => d.label == operationData.day_of_week)?.id ||
       null;

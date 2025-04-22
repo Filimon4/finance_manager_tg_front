@@ -63,6 +63,7 @@ const Settings = () => {
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: ["mainAccount"] });
       queryClient.refetchQueries({ queryKey: ["operations"] });
+      queryClient.refetchQueries({ queryKey: ["balance"] });
     },
     onError: (error) => {
       console.error("Error creating operation:", error);

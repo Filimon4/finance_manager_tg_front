@@ -192,7 +192,7 @@ const EditOperation = () => {
         {
           params: {
             tg_id:
-              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
           },
         }
       );
@@ -209,7 +209,7 @@ const EditOperation = () => {
         {
           params: {
             tg_id:
-              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
           },
         }
       );

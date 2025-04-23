@@ -23,7 +23,7 @@ const Report = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/account/balance_six_month`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
           },
         }
       );

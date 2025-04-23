@@ -7,8 +7,36 @@ import { ERoutes } from "@shared/types/Routes";
 import Form from "@pages/Form/Form";
 import { FormType } from "@shared/types/FormTypes";
 import Reminders from "@pages/Reminders/Reminders";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useEffect } from "react";
 
 function App() {
+
+  const {refetch: refetchCheckUserExist} = useQuery<{
+    data: { operation: any };
+  }>({
+    queryKey: ["checkUserExist"],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_BACK_END_URL
+        }/api/account/check_user_exist`,
+        {
+          params: {
+            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id
+          }
+        }
+      );
+      return res;
+    },
+    enabled: false
+  });
+
+  useEffect(() => {
+    refetchCheckUserExist()
+  }, [])
+
   if (window?.Telegram?.WebApp) {
     window.Telegram.WebApp.ready();
     window.Telegram.WebApp.expand();

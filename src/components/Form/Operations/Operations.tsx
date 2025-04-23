@@ -77,8 +77,7 @@ const Operation = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/categories/all`,
         {
           params: {
-            tg_id:
-              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
           },
         }
       );
@@ -94,8 +93,7 @@ const Operation = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/all`,
         {
           params: {
-            tg_id:
-              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
           },
         }
       );
@@ -133,7 +131,7 @@ const Operation = () => {
       : new Date().toJSON();
 
     operationData.account_id =
-      window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
+      window?.Telegram.WebApp.initDataUnsafe?.user?.id || null;
 
     createOperationMutation.mutate(operationData);
   };

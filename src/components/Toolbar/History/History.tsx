@@ -16,8 +16,7 @@ const History = () => {
         }/api/operations/main_cash_account_operations`,
         {
           params: {
-            tg_id:
-              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
+            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
           },
         }
       );

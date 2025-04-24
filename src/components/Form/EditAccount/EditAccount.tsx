@@ -78,6 +78,18 @@ const EditAccount = () => {
       queryClient.refetchQueries({
         queryKey: ["cashAccounts"],
       });
+      queryClient.refetchQueries({
+        queryKey: ["balance"],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["operations"],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["operations"],
+      });
+      queryClient.refetchQueries({
+        queryKey: ["balanceSixMonth"],
+      });
       setFormData({
         id: null,
         cash_account_id: null,

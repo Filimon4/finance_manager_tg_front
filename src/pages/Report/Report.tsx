@@ -17,7 +17,7 @@ const Report = () => {
       }[];
     };
   }>({
-    queryKey: ["reminders"],
+    queryKey: ["balanceSixMonth"],
     queryFn: async () => {
       const res = await axios.get(
         `${import.meta.env.VITE_BACK_END_URL}/api/account/balance_six_month`,

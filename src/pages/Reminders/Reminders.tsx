@@ -19,7 +19,8 @@ const Reminders = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/reminders/users_reminders`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
+            tg_id:
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );

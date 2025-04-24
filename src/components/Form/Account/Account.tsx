@@ -71,7 +71,7 @@ const Account = () => {
   const handleSubmit = () => {
     const operationData = structuredClone(formData);
     operationData.account_id =
-      window?.Telegram.WebApp.initDataUnsafe?.user?.id || null;
+      window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
     createAccountMutation.mutate(operationData);
   };
 

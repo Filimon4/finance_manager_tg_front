@@ -124,7 +124,7 @@ const EditOperation = () => {
       );
       return res;
     },
-    enabled: false
+    enabled: false,
   });
 
   useEffect(() => {
@@ -192,7 +192,7 @@ const EditOperation = () => {
         {
           params: {
             tg_id:
-              window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -209,7 +209,7 @@ const EditOperation = () => {
         {
           params: {
             tg_id:
-              window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );

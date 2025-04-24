@@ -10,7 +10,8 @@ const Accounts = () => {
   const { data } = useQuery<{ data: { accounts_overview: any[] } }>({
     queryKey: ["cashAccounts"],
     queryFn: async () => {
-      const tg_id = window?.Telegram.WebApp.initDataUnsafe?.user?.id || null;
+      const tg_id =
+        window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150;
       const res = await axios.get(
         `${
           import.meta.env.VITE_BACK_END_URL

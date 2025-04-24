@@ -19,7 +19,8 @@ const Settings = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/all`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
+            tg_id:
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -35,7 +36,8 @@ const Settings = () => {
         `${import.meta.env.VITE_BACK_END_URL}/api/cash_accounts/main`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
+            tg_id:
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -51,7 +53,8 @@ const Settings = () => {
         newOperation,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
+            tg_id:
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );

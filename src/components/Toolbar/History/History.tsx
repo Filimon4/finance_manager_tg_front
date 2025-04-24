@@ -16,7 +16,8 @@ const History = () => {
         }/api/operations/main_cash_account_operations`,
         {
           params: {
-            tg_id: window?.Telegram.WebApp.initDataUnsafe?.user?.id || null,
+            tg_id:
+              window?.Telegram.WebApp.initDataUnsafe?.user?.id || 1289261150,
           },
         }
       );
@@ -44,15 +45,17 @@ const History = () => {
                 }
               >
                 <p className="flex flex-col gap-0">
-                  {(op.name?.length > 20
-                    ? op.name.slice(0, 20) + "..."
-                    : op.name) || "Название отсутствует"}
+                  <span className="truncate max-w-full">
+                    {op.name?.length > 20
+                      ? op.name.slice(0, 20) + "..."
+                      : op.name || "Название отсутствует"}
+                  </span>
                   <span className="text-sm text-gray-500">
                     Дата: {operationDate}
                   </span>
                 </p>
                 <p
-                  className={`text-2xl ${
+                  className={`text-2xl whitespace-nowrap ${
                     isIncome ? "text-green-500" : "text-red-500"
                   }`}
                 >

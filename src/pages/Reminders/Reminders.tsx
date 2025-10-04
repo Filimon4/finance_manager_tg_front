@@ -29,8 +29,6 @@ const Reminders = () => {
     staleTime: 30000,
   });
 
-  console.log(JSON.stringify(allReminders, null, 2));
-
   return (
     <MainContainer>
       <div className={`flex flex-col gap-2 justify-between h-full text-white`}>
